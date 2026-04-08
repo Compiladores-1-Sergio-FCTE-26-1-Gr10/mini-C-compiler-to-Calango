@@ -1,0 +1,37 @@
+site_name: Mini C Compiler to Calango
+theme:
+  name: material
+  language: pt-BR
+  palette: 
+
+    - scheme: default
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-7
+        name: Mudar para modo escuro
+    - scheme: slate
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-4
+        name: Mudar para modo claro
+  features:
+    - search.suggest 
+    - content.code.copy 
+
+markdown_extensions:
+- pymdownx.arithmatex:
+    generic: true
+
+extra_javascript:
+  - javascripts/mathjax.js
+  - https://polyfill.io/v3/polyfill.min.js?features=es6
+  - https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js
+
+nav:
+  - Home: index.md
+  - Analisador Léxico: analisador-lexico.md
+  - Decisões técnicas: decisoes-tecnicas.md
+  - Planejamento de sprints: planejamento-de-sprints.md
+  - Problemas e soluções encontrados: problemas-e-solucoes-encontrados.md
