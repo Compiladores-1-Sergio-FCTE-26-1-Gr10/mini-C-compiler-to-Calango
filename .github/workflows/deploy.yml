@@ -1,0 +1,27 @@
+name: Deploy MkDocs
+on:
+  push:
+    branches:
+      - main 
+
+permissions:
+  contents: write
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: configurar python
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.x
+
+      - name: instalar dependencias
+        run: |
+          pip install mkdocs-material
+          pip install pymdown-extensions
+
+      - name: deploy do site
+        run: mkdocs gh-deploy --force
