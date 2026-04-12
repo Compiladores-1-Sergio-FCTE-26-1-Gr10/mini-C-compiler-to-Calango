@@ -44,6 +44,10 @@ Este é o repositório do grupo 10 da disciplina de Compiladores sob a orientaç
 </table>
 </center>
 
+---
+
+## Histórico de Versões
+
 | Versão       | Descrição | Data                                           | Autor                                       |
 | --------- | ----- | --------------------------------------------------- | -------------------------------------------- 
 | 1.0 |  Criação da página home inicial.   |  12/04/2026 | [@Luiz](https://github.com/luizfaria1989) |
