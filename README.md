@@ -6,7 +6,7 @@
 
 Este é o repositório do grupo 10 da disciplina de Compiladores sob a orientação do Prof. Sérgio Freitas (UnB - Gama). Neste repositório você encontrará o desenvolvimento de um compilador de mini c - uma variante mais restrita da linguagem de programação C - para Calango - a qual é utilizada na disciplina de Algoritmos e Programação de Computadores. O projeto conta com os códigos produzidos ao longo da disciplina pelos membros do grupo e também a documentação das etapas de produção do compilador, ela pode ser acessada pelo Git Pages do repositório.
 
-Acesse a documentação completa do projeto [arqui](https://compiladores-1-sergio-fcte-26-1-gr10.github.io/mini-C-compiler-to-Calango/)
+Acesse a documentação completa do projeto [aqui](https://compiladores-1-sergio-fcte-26-1-gr10.github.io/mini-C-compiler-to-Calango/)
 
 ## Grupo 10 - Compiladores 1 - 2026.1
 
@@ -49,6 +49,10 @@ Acesse a documentação completa do projeto [arqui](https://compiladores-1-sergi
     </tr>
 </table>
 </center>
+
+---
+
+## Histórico de Versões
 
 | Versão       | Descrição | Data                                           | Autor                                       |
 | --------- | ----- | --------------------------------------------------- | -------------------------------------------- |
