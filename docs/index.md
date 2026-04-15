@@ -44,6 +44,36 @@ Este é o repositório do grupo 10 da disciplina de Compiladores sob a orientaç
 </table>
 </center>
 
+
+## Bibliografia e Links Úteis
+
+### Links e referencial para linguagem mini-C:
+
+* [mini-c-compiler/thmasq](https://github.com/thmasq/mini-c-compiler)
+* [GFG - Ansi C(89)](https://www.geeksforgeeks.org/c/ansi-c-c89-standard/)
+
+### Links e referencial para Linguagem Calango:
+
+* [Doc. no Github](https://github.com/GeovanaRamos/calango)
+* [Calango - SAE](https://sae.unb.br/cae/conteudo/unbfga/apc/new_ambientedealgoritmo.html)
+* [Dowload Calango 1.0](https://calango.software.informer.com/)
+
+### Bibliografia suporte
+- **TREMBLAY, J. P.; SORENSON, P. G.** Theory and Practice of Compiler Writing. BS Publications, 2008. (eBrary)  
+  [Disponível aqui](http://site.ebrary.com/lib/univbrasilia/docDetail.action?docID=10416238)
+- **WIRTH, N.** Compiler Construction. Zurich, November, 2005. ISBN 0-201-40353-6. (open access)  
+  [Disponível aqui](http://www.ethoberon.ethz.ch/WirthPubl/CBEAll.pdf)
+- **Singh, R.** Design and Implementation of Compiler. New Age International, 2009. (eBrary)  
+  [Disponível aqui](http://site.ebrary.com/lib/univbrasilia/docDetail.action?docID=10318741)
+
+- **Subramanian, K.G.** Formal Models, Languages and Applications. WorldScientific, 2006. (eBrary)  
+  [Disponível aqui](http://site.ebrary.com/lib/univbrasilia/docDetail.action?docID=10201404)
+- **HERRERA HERNÁNDERZ, E.; CASA NOVAS HERRERO, N.** Compilación II. Editorial Félix Varela, 2006. (eBrary)  
+  [Disponível aqui](http://site.ebrary.com/lib/univbrasilia/docDetail.action?docID=10431161)
+- **MARTIN-VIDE, C.** Scientific Applications of Language Methods. Imperial College Press, 2010. (eBrary)  
+  [Disponível aqui](http://site.ebrary.com/lib/univbrasilia/docDetail.action?docID=10480156)
+- **KOWALTOWSKI, T.** Implementação de Linguagens de Programação. Editora Guanabara, 1983.
+
 ---
 
 ## Histórico de Versões
@@ -51,3 +81,4 @@ Este é o repositório do grupo 10 da disciplina de Compiladores sob a orientaç
 | Versão       | Descrição | Data                                           | Autor                                       |
 | --------- | ----- | --------------------------------------------------- | -------------------------------------------- 
 | 1.0 |  Criação da página home inicial.   |  12/04/2026 | [@Luiz](https://github.com/luizfaria1989) |
+| 1.1 |  Adição de bibliogradia e links uteis   |  15/04/2026 | [@mateus](https://github.com/MVConsorte) |
