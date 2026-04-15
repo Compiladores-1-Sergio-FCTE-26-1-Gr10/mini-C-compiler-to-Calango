@@ -45,15 +45,16 @@ extra_javascript:
 
 nav:
   - Home: index.md
-  - Atas de Reunião:
-    - Ata 15/04/26: atas-de-reuniao/ata-15-04.md
+  - Gerenciamento:
+    - Atas de Reunião:
+      - Ata 15/04/26: gerenciamento/atas-de-reuniao/ata-15-04.md
+    - Abordagem de desenvolvimento: gerenciamento/abordagem-de-desenvolvimento.md
+    - Planejamento de sprints: gerenciamento/planejamento-de-sprints.md
   - Escopo do Projeto: escopo.md
   - Decisões técnicas: decisoes-tecnicas.md
-  - Planejamento de sprints: planejamento-de-sprints.md
   - Analisador Léxico: analisador-lexico.md
   - Analisador Sintático: analisador-sintatico.md
   - Problemas e soluções encontrados: problemas-e-solucoes-encontrados.md
-
 
 extra_css:
   - stylesheets/extra.css
