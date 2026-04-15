@@ -21,6 +21,8 @@ Subconjunto da linguagem C com as seguintes características:
 - Entrada e saída via `printf` e `scanf`
 - Operadores aritméticos, relacionais e lógicos
 
+_Extensão:_ `.c`
+
 ### Calango (saída)
 
 Interpretador de pseudocódigo em português estruturado, desenvolvido na UnB. As principais correspondências entre Mini C e Calango são:
@@ -45,6 +47,10 @@ Interpretador de pseudocódigo em português estruturado, desenvolvido na UnB. A
 | `true` | `VERDADEIRO` |
 | `false` | `FALSO` |
 | `int main() { }` | `algoritmo nome; principal ... fimPrincipal` |
+
+Obs.: como estamos fazendo uma transpilação entre linguagem C para Calango, o qual é interpretado na JVM, não há um arquivo de saída propriamente dito, mas sim um programa em Calango que pode ser executado no interpretador. Com isso, por votação na equipe, convencionamentos que o código gerado terá uma extensão `.cal`.
+
+_Extensão:_ `.cal`
 
 ---
 
