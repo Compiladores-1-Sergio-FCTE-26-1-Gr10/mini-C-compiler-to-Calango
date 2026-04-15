@@ -48,7 +48,7 @@ nav:
   - Gerenciamento:
     - Atas de Reunião:
       - Ata 15/04/26: gerenciamento/atas-de-reuniao/ata-15-04.md
-    - Abordagem de desenvolvimento: gerenciamento/abordagem-de-desenvolvimento.md
+    - Abordagem de desenvolvimento: gerenciamento/abordagem-desenvolvimento.md
     - Planejamento de sprints: gerenciamento/planejamento-de-sprints.md
   - Escopo do Projeto: escopo.md
   - Decisões técnicas: decisoes-tecnicas.md
