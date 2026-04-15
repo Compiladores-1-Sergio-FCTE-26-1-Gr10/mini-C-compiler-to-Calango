@@ -21,8 +21,22 @@ theme:
     - content.code.copy 
 
 markdown_extensions:
-- pymdownx.arithmatex:
-    generic: true
+  - tables
+  - attr_list
+  - pymdownx.blocks.caption
+  - md_in_html
+  - pymdownx.highlight: # Adicione isso para garantir o controle dos blocos
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.superfences: # Melhora a renderização dos blocos de código
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.arithmatex:
+      generic: true
+
 
 extra_javascript:
   - javascripts/mathjax.js
@@ -31,7 +45,16 @@ extra_javascript:
 
 nav:
   - Home: index.md
-  - Analisador Léxico: analisador-lexico.md
+  - Gerenciamento:
+    - Atas de Reunião:
+      - Ata 15/04/26: gerenciamento/atas-de-reuniao/ata-15-04.md
+    - Abordagem de desenvolvimento: gerenciamento/abordagem-de-desenvolvimento.md
+    - Planejamento de sprints: gerenciamento/planejamento-de-sprints.md
+  - Escopo do Projeto: escopo.md
   - Decisões técnicas: decisoes-tecnicas.md
-  - Planejamento de sprints: planejamento-de-sprints.md
+  - Analisador Léxico: analisador-lexico.md
+  - Analisador Sintático: analisador-sintatico.md
   - Problemas e soluções encontrados: problemas-e-solucoes-encontrados.md
+
+extra_css:
+  - stylesheets/extra.css
