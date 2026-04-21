@@ -51,6 +51,7 @@ nav:
     - Abordagem de desenvolvimento: gerenciamento/abordagem-desenvolvimento.md
     - Planejamento de sprints: gerenciamento/planejamento-de-sprints.md
   - Escopo do Projeto: escopo.md
+  - Linguagem-Fonte Mini C: linguagem-fonte-c.md
   - Decisões técnicas: decisoes-tecnicas.md
   - Analisador Léxico: analisador-lexico.md
   - Analisador Sintático: analisador-sintatico.md
