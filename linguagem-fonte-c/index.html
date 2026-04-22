@@ -1,0 +1,2075 @@
+
+<!doctype html>
+<html lang="pt" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../escopo/">
+      
+      
+        <link rel="next" href="../decisoes-tecnicas/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>Linguagem-Fonte Mini C - Mini C Compiler to Calango</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#linguagem-fonte-mini-c" class="md-skip">
+          Pular para conteúdo
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Cabeçalho">
+    <a href=".." title="Mini C Compiler to Calango" class="md-header__button md-logo" aria-label="Mini C Compiler to Calango" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Mini C Compiler to Calango
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Linguagem-Fonte Mini C
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Mudar para modo escuro"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Mudar para modo escuro" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Mudar para modo claro"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Mudar para modo claro" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Buscar" placeholder="Buscar" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Pesquisar">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Limpar" aria-label="Limpar" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Inicializando busca
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navegação" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="Mini C Compiler to Calango" class="md-nav__button md-logo" aria-label="Mini C Compiler to Calango" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Mini C Compiler to Calango
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Gerenciamento
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Gerenciamento
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_1" id="__nav_2_1_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Atas de Reunião
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Atas de Reunião
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../gerenciamento/atas-de-reuniao/ata-15-04/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ata 15/04/26
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../gerenciamento/abordagem-desenvolvimento/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Abordagem de desenvolvimento
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../gerenciamento/planejamento-de-sprints/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Planejamento de sprints
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../escopo/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Escopo do Projeto
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Linguagem-Fonte Mini C
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Linguagem-Fonte Mini C
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Índice">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Índice
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#objetivo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Objetivo
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#visao-geral" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Visão Geral
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sintaxe-basica" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sintaxe Básica
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Sintaxe Básica">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-estrutura-do-programa" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Estrutura do programa
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-elementos-lexicos-principais" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Elementos léxicos principais
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-declaracoes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Declarações
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. Declarações">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#declaracao-simples" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Declaração simples
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#declaracao-com-inicializacao" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Declaração com inicialização
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-comandos-basicos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Comandos básicos
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4. Comandos básicos">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#atribuicao" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Atribuição
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#condicional" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Condicional
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#repeticao" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Repetição
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#entrada-e-saida" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Entrada e saída
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#5-expressoes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Expressões
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5. Expressões">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#expressoes-aritmeticas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Expressões aritméticas
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#expressoes-relacionais" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Expressões relacionais
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#expressoes-logicas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Expressões lógicas
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#6-forma-sintatica-geral" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. Forma sintática geral
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#semantica-basica" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Semântica Básica
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Semântica Básica">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-regras-de-declaracao-e-uso" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Regras de declaração e uso
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-regras-de-tipos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Regras de tipos
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-regras-para-atribuicao" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Regras para atribuição
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-regras-para-expressoes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Regras para expressões
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4. Regras para expressões">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#expressoes-aritmeticas_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Expressões aritméticas
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#expressoes-relacionais_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Expressões relacionais
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#expressoes-logicas_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Expressões lógicas
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#5-regras-para-condicoes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Regras para condições
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#6-regras-para-entrada-e-saida" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. Regras para entrada e saída
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="6. Regras para entrada e saída">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#printf" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        printf
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#scanf" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        scanf
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#7-erros-semanticos-esperados" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. Erros semânticos esperados
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#exemplos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Exemplos
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Exemplos">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#exemplo-semanticamente-valido" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Exemplo semanticamente válido
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#exemplo-semanticamente-invalido" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Exemplo semanticamente inválido
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#relacao-com-tdd" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Relação com TDD
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#consideracoes-finais" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Considerações Finais
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#historico-de-versoes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Histórico de Versões
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../decisoes-tecnicas/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Decisões técnicas
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../analisador-lexico/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Analisador Léxico
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../analisador-sintatico/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Analisador Sintático
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../problemas-e-solucoes-encontrados/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Problemas e soluções encontrados
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Índice">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Índice
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#objetivo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Objetivo
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#visao-geral" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Visão Geral
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sintaxe-basica" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sintaxe Básica
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Sintaxe Básica">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-estrutura-do-programa" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Estrutura do programa
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-elementos-lexicos-principais" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Elementos léxicos principais
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-declaracoes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Declarações
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. Declarações">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#declaracao-simples" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Declaração simples
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#declaracao-com-inicializacao" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Declaração com inicialização
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-comandos-basicos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Comandos básicos
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4. Comandos básicos">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#atribuicao" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Atribuição
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#condicional" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Condicional
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#repeticao" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Repetição
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#entrada-e-saida" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Entrada e saída
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#5-expressoes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Expressões
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5. Expressões">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#expressoes-aritmeticas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Expressões aritméticas
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#expressoes-relacionais" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Expressões relacionais
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#expressoes-logicas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Expressões lógicas
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#6-forma-sintatica-geral" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. Forma sintática geral
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#semantica-basica" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Semântica Básica
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Semântica Básica">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-regras-de-declaracao-e-uso" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Regras de declaração e uso
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-regras-de-tipos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Regras de tipos
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-regras-para-atribuicao" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Regras para atribuição
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-regras-para-expressoes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Regras para expressões
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4. Regras para expressões">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#expressoes-aritmeticas_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Expressões aritméticas
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#expressoes-relacionais_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Expressões relacionais
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#expressoes-logicas_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Expressões lógicas
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#5-regras-para-condicoes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Regras para condições
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#6-regras-para-entrada-e-saida" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. Regras para entrada e saída
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="6. Regras para entrada e saída">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#printf" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        printf
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#scanf" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        scanf
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#7-erros-semanticos-esperados" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. Erros semânticos esperados
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#exemplos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Exemplos
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Exemplos">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#exemplo-semanticamente-valido" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Exemplo semanticamente válido
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#exemplo-semanticamente-invalido" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Exemplo semanticamente inválido
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#relacao-com-tdd" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Relação com TDD
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#consideracoes-finais" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Considerações Finais
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#historico-de-versoes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Histórico de Versões
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="linguagem-fonte-mini-c">Linguagem-Fonte Mini C</h1>
+<h2 id="objetivo">Objetivo</h2>
+<p>Esta página descreve a <strong>sintaxe</strong> e a <strong>semântica básica</strong> da linguagem-fonte adotada neste projeto, chamada <strong>Mini C</strong>.</p>
+<p>A Mini C é um subconjunto da linguagem C definido especificamente para este compilador, cujo objetivo é traduzir programas escritos nessa linguagem para <strong>Calango</strong>.</p>
+<blockquote>
+<p>Esta página complementa a documentação de <a href="../escopo/">Escopo do Projeto</a>.
+As construções suportadas e não suportadas estão detalhadas em <code>escopo.md</code>.
+A gramática detalhada pode ser consultada em <a href="../analisador-sintatico/">Analisador Sintático</a>.</p>
+</blockquote>
+<hr />
+<h2 id="visao-geral">Visão Geral</h2>
+<p>A Mini C adotada neste projeto possui as seguintes características gerais:</p>
+<ul>
+<li>tipagem estática;</li>
+<li>tipos primitivos <code>int</code>, <code>float</code>, <code>char</code> e <code>bool</code>;</li>
+<li>programa composto por uma única função principal <code>main</code>;</li>
+<li>declarações de variáveis no início do bloco principal;</li>
+<li>comandos de atribuição, seleção, repetição e entrada/saída;</li>
+<li>expressões aritméticas, relacionais e lógicas.</li>
+</ul>
+<p>A estrutura geral de um programa válido é:</p>
+<div class="language-c highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="w">    </span><span class="cm">/* declarações */</span>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w">    </span><span class="cm">/* comandos */</span>
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>Essa definição <strong>não corresponde à linguagem C completa</strong>, mas a uma versão reduzida delimitada pelo escopo do projeto.</p>
+<hr />
+<h2 id="sintaxe-basica">Sintaxe Básica</h2>
+<h3 id="1-estrutura-do-programa">1. Estrutura do programa</h3>
+<p>Todo programa Mini C deve possuir exatamente uma função principal com a seguinte forma:</p>
+<div class="language-c highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">    </span><span class="cm">/* declarações */</span>
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">    </span><span class="cm">/* comandos */</span>
+</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>Nesta linguagem, as declarações devem aparecer antes dos comandos.</p>
+<hr />
+<h3 id="2-elementos-lexicos-principais">2. Elementos léxicos principais</h3>
+<p>A linguagem utiliza, entre outros, os seguintes grupos de tokens:</p>
+<ul>
+<li><strong>palavras-chave</strong>: <code>int</code>, <code>float</code>, <code>char</code>, <code>bool</code>, <code>main</code>, <code>if</code>, <code>else</code>, <code>while</code>, <code>for</code>, <code>do</code>, <code>printf</code>, <code>scanf</code>, <code>true</code>, <code>false</code>;</li>
+<li><strong>identificadores</strong>: nomes de variáveis;</li>
+<li><strong>literais</strong>: inteiros, reais, caracteres, strings e booleanos;</li>
+<li><strong>operadores</strong>: aritméticos, relacionais, lógicos e atribuição simples;</li>
+<li><strong>delimitadores</strong>: <code>(</code>, <code>)</code>, <code>{</code>, <code>}</code>, <code>;</code>, <code>,</code>.</li>
+</ul>
+<p>Exemplos de identificadores válidos:</p>
+<div class="language-c highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="n">x</span>
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="n">contador</span>
+</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="n">_media</span>
+</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="n">valorFinal2</span>
+</span></code></pre></div>
+<p>Exemplos de literais válidos:</p>
+<div class="language-c highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="mi">10</span>
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="mf">3.14</span>
+</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="sc">&#39;a&#39;</span>
+</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="s">&quot;texto&quot;</span>
+</span><span id="__span-3-5"><a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="nb">true</span>
+</span><span id="__span-3-6"><a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="nb">false</span>
+</span></code></pre></div>
+<hr />
+<h3 id="3-declaracoes">3. Declarações</h3>
+<p>As variáveis podem ser declaradas de forma simples ou com inicialização.</p>
+<h4 id="declaracao-simples">Declaração simples</h4>
+<div class="language-c highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="kt">int</span><span class="w"> </span><span class="n">x</span><span class="p">;</span>
+</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="kt">float</span><span class="w"> </span><span class="n">media</span><span class="p">;</span>
+</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="kt">char</span><span class="w"> </span><span class="n">letra</span><span class="p">;</span>
+</span><span id="__span-4-4"><a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="kt">bool</span><span class="w"> </span><span class="n">ativo</span><span class="p">;</span>
+</span></code></pre></div>
+<h4 id="declaracao-com-inicializacao">Declaração com inicialização</h4>
+<div class="language-c highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="kt">int</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">10</span><span class="p">;</span>
+</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="kt">float</span><span class="w"> </span><span class="n">media</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">7.5</span><span class="p">;</span>
+</span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="kt">char</span><span class="w"> </span><span class="n">letra</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="sc">&#39;a&#39;</span><span class="p">;</span>
+</span><span id="__span-5-4"><a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="kt">bool</span><span class="w"> </span><span class="n">ativo</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">true</span><span class="p">;</span>
+</span></code></pre></div>
+<hr />
+<h3 id="4-comandos-basicos">4. Comandos básicos</h3>
+<p>A Mini C aceita os seguintes grupos de comandos.</p>
+<h4 id="atribuicao">Atribuição</h4>
+<div class="language-c highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">10</span><span class="p">;</span>
+</span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="n">media</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">media</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mf">1.0</span><span class="p">;</span>
+</span><span id="__span-6-3"><a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="n">ativo</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span>
+</span></code></pre></div>
+<h4 id="condicional">Condicional</h4>
+<div class="language-c highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">x</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-7-2"><a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="w">    </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;positivo&quot;</span><span class="p">);</span>
+</span><span id="__span-7-3"><a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="p">}</span>
+</span><span id="__span-7-4"><a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a>
+</span><span id="__span-7-5"><a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">x</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-7-6"><a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a><span class="w">    </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;positivo&quot;</span><span class="p">);</span>
+</span><span id="__span-7-7"><a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-7-8"><a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a><span class="w">    </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;nao positivo&quot;</span><span class="p">);</span>
+</span><span id="__span-7-9"><a id="__codelineno-7-9" name="__codelineno-7-9" href="#__codelineno-7-9"></a><span class="p">}</span>
+</span></code></pre></div>
+<h4 id="repeticao">Repetição</h4>
+<div class="language-c highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="n">x</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">10</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-8-2"><a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="w">    </span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+</span><span id="__span-8-3"><a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="p">}</span>
+</span><span id="__span-8-4"><a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a>
+</span><span id="__span-8-5"><a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">10</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-8-6"><a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a><span class="w">    </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;%d&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">i</span><span class="p">);</span>
+</span><span id="__span-8-7"><a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a><span class="p">}</span>
+</span><span id="__span-8-8"><a id="__codelineno-8-8" name="__codelineno-8-8" href="#__codelineno-8-8"></a>
+</span><span id="__span-8-9"><a id="__codelineno-8-9" name="__codelineno-8-9" href="#__codelineno-8-9"></a><span class="k">do</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-8-10"><a id="__codelineno-8-10" name="__codelineno-8-10" href="#__codelineno-8-10"></a><span class="w">    </span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+</span><span id="__span-8-11"><a id="__codelineno-8-11" name="__codelineno-8-11" href="#__codelineno-8-11"></a><span class="p">}</span><span class="w"> </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="n">x</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span>
+</span></code></pre></div>
+<h4 id="entrada-e-saida">Entrada e saída</h4>
+<div class="language-c highlight"><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="n">printf</span><span class="p">(</span><span class="s">&quot;ola&quot;</span><span class="p">);</span>
+</span><span id="__span-9-2"><a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="n">printf</span><span class="p">(</span><span class="s">&quot;valor: %d&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">x</span><span class="p">);</span>
+</span><span id="__span-9-3"><a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a><span class="n">scanf</span><span class="p">(</span><span class="s">&quot;%d&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">x</span><span class="p">);</span>
+</span></code></pre></div>
+<hr />
+<h3 id="5-expressoes">5. Expressões</h3>
+<p>As expressões da Mini C podem ser aritméticas, relacionais ou lógicas.</p>
+<h4 id="expressoes-aritmeticas">Expressões aritméticas</h4>
+<div class="language-c highlight"><pre><span></span><code><span id="__span-10-1"><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="n">x</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">y</span>
+</span><span id="__span-10-2"><a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="n">a</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">b</span>
+</span><span id="__span-10-3"><a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a><span class="n">n</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">2</span>
+</span><span id="__span-10-4"><a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a><span class="n">total</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mi">3</span>
+</span><span id="__span-10-5"><a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a><span class="n">valor</span><span class="w"> </span><span class="o">%</span><span class="w"> </span><span class="mi">2</span>
+</span></code></pre></div>
+<h4 id="expressoes-relacionais">Expressões relacionais</h4>
+<div class="language-c highlight"><pre><span></span><code><span id="__span-11-1"><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="n">x</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">y</span>
+</span><span id="__span-11-2"><a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="n">x</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">y</span>
+</span><span id="__span-11-3"><a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a><span class="n">x</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">y</span>
+</span><span id="__span-11-4"><a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a><span class="n">x</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="n">y</span>
+</span><span id="__span-11-5"><a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a><span class="n">x</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="n">y</span>
+</span><span id="__span-11-6"><a id="__codelineno-11-6" name="__codelineno-11-6" href="#__codelineno-11-6"></a><span class="n">x</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="n">y</span>
+</span></code></pre></div>
+<h4 id="expressoes-logicas">Expressões lógicas</h4>
+<div class="language-c highlight"><pre><span></span><code><span id="__span-12-1"><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="n">a</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">b</span>
+</span><span id="__span-12-2"><a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a><span class="n">a</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="n">b</span>
+</span><span id="__span-12-3"><a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a><span class="o">!</span><span class="n">a</span>
+</span></code></pre></div>
+<p>As expressões podem ser combinadas e agrupadas com parênteses.</p>
+<p>Exemplo:</p>
+<div class="language-c highlight"><pre><span></span><code><span id="__span-13-1"><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="p">(</span><span class="n">x</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="p">(</span><span class="n">ativo</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="n">aprovado</span><span class="p">)</span>
+</span></code></pre></div>
+<hr />
+<h3 id="6-forma-sintatica-geral">6. Forma sintática geral</h3>
+<p>De forma simplificada, a linguagem pode ser descrita pela seguinte estrutura:</p>
+<div class="language-bnf highlight"><pre><span></span><code><span id="__span-14-1"><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="p">&lt;</span><span class="nc">programa</span><span class="p">&gt;</span> <span class="o">::=</span> &quot;int&quot; &quot;main&quot; &quot;(&quot; &quot;)&quot; &quot;{&quot; <span class="p">&lt;</span><span class="nc">declaracoes</span><span class="p">&gt;</span> <span class="p">&lt;</span><span class="nc">comandos</span><span class="p">&gt;</span> &quot;}&quot;
+</span><span id="__span-14-2"><a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a>
+</span><span id="__span-14-3"><a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a><span class="p">&lt;</span><span class="nc">declaracoes</span><span class="p">&gt;</span> <span class="o">::=</span> <span class="p">&lt;</span><span class="nc">declaracao</span><span class="p">&gt;</span> <span class="p">&lt;</span><span class="nc">declaracoes</span><span class="p">&gt;</span> | ε
+</span><span id="__span-14-4"><a id="__codelineno-14-4" name="__codelineno-14-4" href="#__codelineno-14-4"></a><span class="p">&lt;</span><span class="nc">comandos</span><span class="p">&gt;</span> <span class="o">::=</span> <span class="p">&lt;</span><span class="nc">comando</span><span class="p">&gt;</span> <span class="p">&lt;</span><span class="nc">comandos</span><span class="p">&gt;</span> | ε
+</span><span id="__span-14-5"><a id="__codelineno-14-5" name="__codelineno-14-5" href="#__codelineno-14-5"></a>
+</span><span id="__span-14-6"><a id="__codelineno-14-6" name="__codelineno-14-6" href="#__codelineno-14-6"></a><span class="p">&lt;</span><span class="nc">declaracao</span><span class="p">&gt;</span> <span class="o">::=</span> <span class="p">&lt;</span><span class="nc">tipo</span><span class="p">&gt;</span> ID &quot;;&quot;
+</span><span id="__span-14-7"><a id="__codelineno-14-7" name="__codelineno-14-7" href="#__codelineno-14-7"></a>               | <span class="p">&lt;</span><span class="nc">tipo</span><span class="p">&gt;</span> ID &quot;=&quot; <span class="p">&lt;</span><span class="nc">expressao</span><span class="p">&gt;</span> &quot;;&quot;
+</span><span id="__span-14-8"><a id="__codelineno-14-8" name="__codelineno-14-8" href="#__codelineno-14-8"></a>
+</span><span id="__span-14-9"><a id="__codelineno-14-9" name="__codelineno-14-9" href="#__codelineno-14-9"></a><span class="p">&lt;</span><span class="nc">tipo</span><span class="p">&gt;</span> <span class="o">::=</span> &quot;int&quot; | &quot;float&quot; | &quot;char&quot; | &quot;bool&quot;
+</span><span id="__span-14-10"><a id="__codelineno-14-10" name="__codelineno-14-10" href="#__codelineno-14-10"></a>
+</span><span id="__span-14-11"><a id="__codelineno-14-11" name="__codelineno-14-11" href="#__codelineno-14-11"></a><span class="p">&lt;</span><span class="nc">comando</span><span class="p">&gt;</span> <span class="o">::=</span> <span class="p">&lt;</span><span class="nc">atribuicao</span><span class="p">&gt;</span>
+</span><span id="__span-14-12"><a id="__codelineno-14-12" name="__codelineno-14-12" href="#__codelineno-14-12"></a>            | <span class="p">&lt;</span><span class="nc">if</span><span class="p">&gt;</span>
+</span><span id="__span-14-13"><a id="__codelineno-14-13" name="__codelineno-14-13" href="#__codelineno-14-13"></a>            | <span class="p">&lt;</span><span class="nc">while</span><span class="p">&gt;</span>
+</span><span id="__span-14-14"><a id="__codelineno-14-14" name="__codelineno-14-14" href="#__codelineno-14-14"></a>            | <span class="p">&lt;</span><span class="nc">for</span><span class="p">&gt;</span>
+</span><span id="__span-14-15"><a id="__codelineno-14-15" name="__codelineno-14-15" href="#__codelineno-14-15"></a>            | <span class="p">&lt;</span><span class="nc">do_while</span><span class="p">&gt;</span>
+</span><span id="__span-14-16"><a id="__codelineno-14-16" name="__codelineno-14-16" href="#__codelineno-14-16"></a>            | <span class="p">&lt;</span><span class="nc">printf</span><span class="p">&gt;</span>
+</span><span id="__span-14-17"><a id="__codelineno-14-17" name="__codelineno-14-17" href="#__codelineno-14-17"></a>            | <span class="p">&lt;</span><span class="nc">scanf</span><span class="p">&gt;</span>
+</span><span id="__span-14-18"><a id="__codelineno-14-18" name="__codelineno-14-18" href="#__codelineno-14-18"></a>
+</span><span id="__span-14-19"><a id="__codelineno-14-19" name="__codelineno-14-19" href="#__codelineno-14-19"></a><span class="p">&lt;</span><span class="nc">atribuicao</span><span class="p">&gt;</span> <span class="o">::=</span> ID &quot;=&quot; <span class="p">&lt;</span><span class="nc">expressao</span><span class="p">&gt;</span> &quot;;&quot;
+</span></code></pre></div>
+<p>Essa representação é apenas uma visão simplificada da linguagem. A gramática formal detalhada está documentada na página do analisador sintático.</p>
+<hr />
+<h2 id="semantica-basica">Semântica Básica</h2>
+<p>A semântica básica define as regras de significado da linguagem, isto é, as condições para que um programa seja considerado válido não apenas sintaticamente, mas também semanticamente.</p>
+<h3 id="1-regras-de-declaracao-e-uso">1. Regras de declaração e uso</h3>
+<p>A Mini C adota as seguintes regras:</p>
+<ul>
+<li>toda variável deve ser declarada antes do uso;</li>
+<li>não pode haver redeclaração da mesma variável no mesmo escopo;</li>
+<li>as declarações devem ocorrer no início do bloco principal;</li>
+<li>o programa possui uma única função <code>main</code>.</li>
+</ul>
+<p>Exemplo válido:</p>
+<div class="language-c highlight"><pre><span></span><code><span id="__span-15-1"><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a><span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-15-2"><a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a><span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">x</span><span class="p">;</span>
+</span><span id="__span-15-3"><a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a><span class="w">    </span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">10</span><span class="p">;</span>
+</span><span id="__span-15-4"><a id="__codelineno-15-4" name="__codelineno-15-4" href="#__codelineno-15-4"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>Exemplo inválido:</p>
+<div class="language-c highlight"><pre><span></span><code><span id="__span-16-1"><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a><span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-16-2"><a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a><span class="w">    </span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">10</span><span class="p">;</span>
+</span><span id="__span-16-3"><a id="__codelineno-16-3" name="__codelineno-16-3" href="#__codelineno-16-3"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>No segundo caso, <code>x</code> foi usada sem declaração prévia.</p>
+<hr />
+<h3 id="2-regras-de-tipos">2. Regras de tipos</h3>
+<p>A linguagem possui quatro tipos primitivos:</p>
+<ul>
+<li><code>int</code>: números inteiros;</li>
+<li><code>float</code>: números reais;</li>
+<li><code>char</code>: caracteres;</li>
+<li><code>bool</code>: valores lógicos.</li>
+</ul>
+<p>Como a linguagem é estaticamente tipada, toda variável possui um tipo definido em tempo de compilação, e esse tipo deve ser respeitado nas atribuições e expressões.</p>
+<hr />
+<h3 id="3-regras-para-atribuicao">3. Regras para atribuição</h3>
+<p>Uma atribuição só é válida quando o tipo da expressão do lado direito é compatível com o tipo da variável do lado esquerdo.</p>
+<p>Exemplos válidos:</p>
+<div class="language-c highlight"><pre><span></span><code><span id="__span-17-1"><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a><span class="kt">int</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">10</span><span class="p">;</span>
+</span><span id="__span-17-2"><a id="__codelineno-17-2" name="__codelineno-17-2" href="#__codelineno-17-2"></a><span class="kt">float</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">3.14</span><span class="p">;</span>
+</span><span id="__span-17-3"><a id="__codelineno-17-3" name="__codelineno-17-3" href="#__codelineno-17-3"></a><span class="kt">char</span><span class="w"> </span><span class="n">c</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="sc">&#39;a&#39;</span><span class="p">;</span>
+</span><span id="__span-17-4"><a id="__codelineno-17-4" name="__codelineno-17-4" href="#__codelineno-17-4"></a><span class="kt">bool</span><span class="w"> </span><span class="n">ok</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">true</span><span class="p">;</span>
+</span><span id="__span-17-5"><a id="__codelineno-17-5" name="__codelineno-17-5" href="#__codelineno-17-5"></a>
+</span><span id="__span-17-6"><a id="__codelineno-17-6" name="__codelineno-17-6" href="#__codelineno-17-6"></a><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">20</span><span class="p">;</span>
+</span><span id="__span-17-7"><a id="__codelineno-17-7" name="__codelineno-17-7" href="#__codelineno-17-7"></a><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">x</span><span class="p">;</span>
+</span></code></pre></div>
+<p>Exemplos inválidos:</p>
+<div class="language-c highlight"><pre><span></span><code><span id="__span-18-1"><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a><span class="kt">int</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">3.14</span><span class="p">;</span>
+</span><span id="__span-18-2"><a id="__codelineno-18-2" name="__codelineno-18-2" href="#__codelineno-18-2"></a><span class="kt">char</span><span class="w"> </span><span class="n">c</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">10</span><span class="p">;</span>
+</span><span id="__span-18-3"><a id="__codelineno-18-3" name="__codelineno-18-3" href="#__codelineno-18-3"></a><span class="kt">bool</span><span class="w"> </span><span class="n">ok</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+</span></code></pre></div>
+<p>Neste projeto, adota-se a seguinte política semântica:</p>
+<ul>
+<li>atribuições entre elementos do mesmo tipo são válidas;</li>
+<li><code>int</code> pode ser promovido para <code>float</code>;</li>
+<li><code>float</code> não deve ser implicitamente convertido para <code>int</code>;</li>
+<li><code>char</code> deve receber caractere;</li>
+<li><code>bool</code> deve receber valor booleano.</li>
+</ul>
+<hr />
+<h3 id="4-regras-para-expressoes">4. Regras para expressões</h3>
+<h4 id="expressoes-aritmeticas_1">Expressões aritméticas</h4>
+<p>As operações aritméticas exigem operandos numéricos.</p>
+<div class="language-c highlight"><pre><span></span><code><span id="__span-19-1"><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a><span class="o">+</span>
+</span><span id="__span-19-2"><a id="__codelineno-19-2" name="__codelineno-19-2" href="#__codelineno-19-2"></a><span class="o">-</span>
+</span><span id="__span-19-3"><a id="__codelineno-19-3" name="__codelineno-19-3" href="#__codelineno-19-3"></a><span class="o">*</span>
+</span><span id="__span-19-4"><a id="__codelineno-19-4" name="__codelineno-19-4" href="#__codelineno-19-4"></a><span class="o">/</span>
+</span><span id="__span-19-5"><a id="__codelineno-19-5" name="__codelineno-19-5" href="#__codelineno-19-5"></a><span class="o">%</span>
+</span></code></pre></div>
+<p>Regras básicas:</p>
+<ul>
+<li><code>+</code>, <code>-</code>, <code>*</code> e <code>/</code> podem ser usados com <code>int</code> e <code>float</code>;</li>
+<li><code>%</code> deve ser usado apenas com operandos inteiros;</li>
+<li>valores booleanos não devem participar de operações aritméticas.</li>
+</ul>
+<h4 id="expressoes-relacionais_1">Expressões relacionais</h4>
+<p>Operadores relacionais produzem resultado lógico.</p>
+<div class="language-c highlight"><pre><span></span><code><span id="__span-20-1"><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a><span class="o">==</span>
+</span><span id="__span-20-2"><a id="__codelineno-20-2" name="__codelineno-20-2" href="#__codelineno-20-2"></a><span class="o">!=</span>
+</span><span id="__span-20-3"><a id="__codelineno-20-3" name="__codelineno-20-3" href="#__codelineno-20-3"></a><span class="o">&lt;</span>
+</span><span id="__span-20-4"><a id="__codelineno-20-4" name="__codelineno-20-4" href="#__codelineno-20-4"></a><span class="o">&gt;</span>
+</span><span id="__span-20-5"><a id="__codelineno-20-5" name="__codelineno-20-5" href="#__codelineno-20-5"></a><span class="o">&lt;=</span>
+</span><span id="__span-20-6"><a id="__codelineno-20-6" name="__codelineno-20-6" href="#__codelineno-20-6"></a><span class="o">&gt;=</span>
+</span></code></pre></div>
+<p>Regras básicas:</p>
+<ul>
+<li>comparações resultam em valor booleano;</li>
+<li>comparações relacionais exigem operandos compatíveis;</li>
+<li><code>==</code> e <code>!=</code> também exigem compatibilidade entre os tipos comparados.</li>
+</ul>
+<h4 id="expressoes-logicas_1">Expressões lógicas</h4>
+<p>Operadores lógicos atuam sobre valores booleanos.</p>
+<div class="language-c highlight"><pre><span></span><code><span id="__span-21-1"><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a><span class="o">&amp;&amp;</span>
+</span><span id="__span-21-2"><a id="__codelineno-21-2" name="__codelineno-21-2" href="#__codelineno-21-2"></a><span class="o">||</span>
+</span><span id="__span-21-3"><a id="__codelineno-21-3" name="__codelineno-21-3" href="#__codelineno-21-3"></a><span class="o">!</span>
+</span></code></pre></div>
+<p>Regras básicas:</p>
+<ul>
+<li><code>&amp;&amp;</code> e <code>||</code> exigem operandos booleanos;</li>
+<li><code>!</code> exige operando booleano;</li>
+<li>o resultado é sempre booleano.</li>
+</ul>
+<hr />
+<h3 id="5-regras-para-condicoes">5. Regras para condições</h3>
+<p>As expressões usadas em estruturas de controle devem produzir valor booleano.</p>
+<p>Exemplo válido:</p>
+<div class="language-c highlight"><pre><span></span><code><span id="__span-22-1"><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a><span class="kt">bool</span><span class="w"> </span><span class="n">ativo</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">true</span><span class="p">;</span>
+</span><span id="__span-22-2"><a id="__codelineno-22-2" name="__codelineno-22-2" href="#__codelineno-22-2"></a>
+</span><span id="__span-22-3"><a id="__codelineno-22-3" name="__codelineno-22-3" href="#__codelineno-22-3"></a><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">ativo</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-22-4"><a id="__codelineno-22-4" name="__codelineno-22-4" href="#__codelineno-22-4"></a><span class="w">    </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;ok&quot;</span><span class="p">);</span>
+</span><span id="__span-22-5"><a id="__codelineno-22-5" name="__codelineno-22-5" href="#__codelineno-22-5"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>Exemplo válido:</p>
+<div class="language-c highlight"><pre><span></span><code><span id="__span-23-1"><a id="__codelineno-23-1" name="__codelineno-23-1" href="#__codelineno-23-1"></a><span class="kt">int</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">10</span><span class="p">;</span>
+</span><span id="__span-23-2"><a id="__codelineno-23-2" name="__codelineno-23-2" href="#__codelineno-23-2"></a>
+</span><span id="__span-23-3"><a id="__codelineno-23-3" name="__codelineno-23-3" href="#__codelineno-23-3"></a><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">x</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-23-4"><a id="__codelineno-23-4" name="__codelineno-23-4" href="#__codelineno-23-4"></a><span class="w">    </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;positivo&quot;</span><span class="p">);</span>
+</span><span id="__span-23-5"><a id="__codelineno-23-5" name="__codelineno-23-5" href="#__codelineno-23-5"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>Exemplo inválido:</p>
+<div class="language-c highlight"><pre><span></span><code><span id="__span-24-1"><a id="__codelineno-24-1" name="__codelineno-24-1" href="#__codelineno-24-1"></a><span class="kt">int</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">10</span><span class="p">;</span>
+</span><span id="__span-24-2"><a id="__codelineno-24-2" name="__codelineno-24-2" href="#__codelineno-24-2"></a>
+</span><span id="__span-24-3"><a id="__codelineno-24-3" name="__codelineno-24-3" href="#__codelineno-24-3"></a><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">x</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-24-4"><a id="__codelineno-24-4" name="__codelineno-24-4" href="#__codelineno-24-4"></a><span class="w">    </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;erro&quot;</span><span class="p">);</span>
+</span><span id="__span-24-5"><a id="__codelineno-24-5" name="__codelineno-24-5" href="#__codelineno-24-5"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>Nesse caso, a condição não é booleana.</p>
+<hr />
+<h3 id="6-regras-para-entrada-e-saida">6. Regras para entrada e saída</h3>
+<p>As operações de entrada e saída devem respeitar os tipos envolvidos.</p>
+<h4 id="printf"><code>printf</code></h4>
+<p>O primeiro argumento deve ser uma string literal. Os argumentos seguintes devem ser compatíveis com os especificadores de formato usados na string.</p>
+<p>Exemplo:</p>
+<div class="language-c highlight"><pre><span></span><code><span id="__span-25-1"><a id="__codelineno-25-1" name="__codelineno-25-1" href="#__codelineno-25-1"></a><span class="n">printf</span><span class="p">(</span><span class="s">&quot;x = %d&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">x</span><span class="p">);</span>
+</span><span id="__span-25-2"><a id="__codelineno-25-2" name="__codelineno-25-2" href="#__codelineno-25-2"></a><span class="n">printf</span><span class="p">(</span><span class="s">&quot;media = %f&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">media</span><span class="p">);</span>
+</span><span id="__span-25-3"><a id="__codelineno-25-3" name="__codelineno-25-3" href="#__codelineno-25-3"></a><span class="n">printf</span><span class="p">(</span><span class="s">&quot;letra = %c&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">letra</span><span class="p">);</span>
+</span></code></pre></div>
+<h4 id="scanf"><code>scanf</code></h4>
+<p>O <code>scanf</code> recebe uma string de formato e um identificador previamente declarado.</p>
+<p>Exemplo:</p>
+<div class="language-c highlight"><pre><span></span><code><span id="__span-26-1"><a id="__codelineno-26-1" name="__codelineno-26-1" href="#__codelineno-26-1"></a><span class="n">scanf</span><span class="p">(</span><span class="s">&quot;%d&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">x</span><span class="p">);</span>
+</span><span id="__span-26-2"><a id="__codelineno-26-2" name="__codelineno-26-2" href="#__codelineno-26-2"></a><span class="n">scanf</span><span class="p">(</span><span class="s">&quot;%f&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">media</span><span class="p">);</span>
+</span><span id="__span-26-3"><a id="__codelineno-26-3" name="__codelineno-26-3" href="#__codelineno-26-3"></a><span class="n">scanf</span><span class="p">(</span><span class="s">&quot;%c&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">letra</span><span class="p">);</span>
+</span></code></pre></div>
+<hr />
+<h3 id="7-erros-semanticos-esperados">7. Erros semânticos esperados</h3>
+<p>Entre os principais erros semânticos tratados pelo compilador, destacam-se:</p>
+<ul>
+<li>uso de variável não declarada;</li>
+<li>redeclaração de variável;</li>
+<li>atribuição entre tipos incompatíveis;</li>
+<li>operação com tipos incompatíveis;</li>
+<li>uso de expressão não booleana em condição;</li>
+<li>uso de construção fora do escopo definido para a linguagem.</li>
+</ul>
+<hr />
+<h2 id="exemplos">Exemplos</h2>
+<h3 id="exemplo-semanticamente-valido">Exemplo semanticamente válido</h3>
+<div class="language-c highlight"><pre><span></span><code><span id="__span-27-1"><a id="__codelineno-27-1" name="__codelineno-27-1" href="#__codelineno-27-1"></a><span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-27-2"><a id="__codelineno-27-2" name="__codelineno-27-2" href="#__codelineno-27-2"></a><span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">10</span><span class="p">;</span>
+</span><span id="__span-27-3"><a id="__codelineno-27-3" name="__codelineno-27-3" href="#__codelineno-27-3"></a><span class="w">    </span><span class="kt">float</span><span class="w"> </span><span class="n">media</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">7.5</span><span class="p">;</span>
+</span><span id="__span-27-4"><a id="__codelineno-27-4" name="__codelineno-27-4" href="#__codelineno-27-4"></a><span class="w">    </span><span class="kt">bool</span><span class="w"> </span><span class="n">aprovado</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">true</span><span class="p">;</span>
+</span><span id="__span-27-5"><a id="__codelineno-27-5" name="__codelineno-27-5" href="#__codelineno-27-5"></a>
+</span><span id="__span-27-6"><a id="__codelineno-27-6" name="__codelineno-27-6" href="#__codelineno-27-6"></a><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">((</span><span class="n">x</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">aprovado</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-27-7"><a id="__codelineno-27-7" name="__codelineno-27-7" href="#__codelineno-27-7"></a><span class="w">        </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;x = %d&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">x</span><span class="p">);</span>
+</span><span id="__span-27-8"><a id="__codelineno-27-8" name="__codelineno-27-8" href="#__codelineno-27-8"></a><span class="w">    </span><span class="p">}</span>
+</span><span id="__span-27-9"><a id="__codelineno-27-9" name="__codelineno-27-9" href="#__codelineno-27-9"></a>
+</span><span id="__span-27-10"><a id="__codelineno-27-10" name="__codelineno-27-10" href="#__codelineno-27-10"></a><span class="w">    </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="n">x</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">15</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-27-11"><a id="__codelineno-27-11" name="__codelineno-27-11" href="#__codelineno-27-11"></a><span class="w">        </span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+</span><span id="__span-27-12"><a id="__codelineno-27-12" name="__codelineno-27-12" href="#__codelineno-27-12"></a><span class="w">    </span><span class="p">}</span>
+</span><span id="__span-27-13"><a id="__codelineno-27-13" name="__codelineno-27-13" href="#__codelineno-27-13"></a><span class="p">}</span>
+</span></code></pre></div>
+<h3 id="exemplo-semanticamente-invalido">Exemplo semanticamente inválido</h3>
+<div class="language-c highlight"><pre><span></span><code><span id="__span-28-1"><a id="__codelineno-28-1" name="__codelineno-28-1" href="#__codelineno-28-1"></a><span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-28-2"><a id="__codelineno-28-2" name="__codelineno-28-2" href="#__codelineno-28-2"></a><span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">x</span><span class="p">;</span>
+</span><span id="__span-28-3"><a id="__codelineno-28-3" name="__codelineno-28-3" href="#__codelineno-28-3"></a><span class="w">    </span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">3.14</span><span class="p">;</span>
+</span><span id="__span-28-4"><a id="__codelineno-28-4" name="__codelineno-28-4" href="#__codelineno-28-4"></a>
+</span><span id="__span-28-5"><a id="__codelineno-28-5" name="__codelineno-28-5" href="#__codelineno-28-5"></a><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">x</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-28-6"><a id="__codelineno-28-6" name="__codelineno-28-6" href="#__codelineno-28-6"></a><span class="w">        </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;erro&quot;</span><span class="p">);</span>
+</span><span id="__span-28-7"><a id="__codelineno-28-7" name="__codelineno-28-7" href="#__codelineno-28-7"></a><span class="w">    </span><span class="p">}</span>
+</span><span id="__span-28-8"><a id="__codelineno-28-8" name="__codelineno-28-8" href="#__codelineno-28-8"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>Esse programa é inválido porque:</p>
+<ul>
+<li><code>x</code> é do tipo <code>int</code>, mas recebe uma expressão do tipo <code>float</code>;</li>
+<li>a condição do <code>if</code> não produz valor booleano.</li>
+</ul>
+<hr />
+<h2 id="relacao-com-tdd">Relação com TDD</h2>
+<p>Como o desenvolvimento do compilador é orientado por <strong>TDD (Test-Driven Development)</strong>, as regras sintáticas e semânticas descritas nesta página servem também como base para a definição dos testes do projeto.</p>
+<p>Para cada construção aceita ou rejeitada pela linguagem, devem ser criados testes que validem o comportamento esperado do compilador, incluindo:</p>
+<ul>
+<li>reconhecimento de programas válidos;</li>
+<li>rejeição de programas sintaticamente inválidos;</li>
+<li>rejeição de programas semanticamente inválidos;</li>
+<li>verificação das mensagens de erro produzidas;</li>
+<li>validação da tradução correta para Calango, quando aplicável.</li>
+</ul>
+<p>Dessa forma, a especificação da linguagem não é apenas descritiva, mas também orienta os critérios de aceitação implementados na suíte de testes.</p>
+<hr />
+<h2 id="consideracoes-finais">Considerações Finais</h2>
+<p>A definição da linguagem-fonte estabelece a base para as demais fases do compilador.</p>
+<p>A partir dela, tornam-se possíveis:</p>
+<ul>
+<li>a especificação dos tokens da linguagem;</li>
+<li>a construção da gramática do analisador sintático;</li>
+<li>a implementação das verificações semânticas;</li>
+<li>a tradução das construções aceitas para Calango.</li>
+</ul>
+<p>Esta página deve ser lida em conjunto com:</p>
+<ul>
+<li><code>escopo.md</code>, para o escopo funcional da linguagem;</li>
+<li><code>analisador-lexico.md</code>, para os tokens e padrões léxicos;</li>
+<li><code>analisador-sintatico.md</code>, para a gramática detalhada;</li>
+<li><code>decisoes-tecnicas.md</code>, para as decisões de implementação.</li>
+</ul>
+<hr />
+<h2 id="historico-de-versoes">Histórico de Versões</h2>
+<table>
+<thead>
+<tr>
+<th>Versão</th>
+<th>Descrição</th>
+<th>Data</th>
+<th>Responsável</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0.1</td>
+<td>Criação da página de linguagem-fonte Mini C</td>
+<td>21/04/2026</td>
+<td>@314dro</td>
+</tr>
+</tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["search.suggest", "content.code.copy"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copiado para \u00e1rea de transfer\u00eancia", "clipboard.copy": "Copiar para \u00e1rea de transfer\u00eancia", "search.result.more.one": "mais 1 nesta p\u00e1gina", "search.result.more.other": "# mais nesta p\u00e1gina", "search.result.none": "Nenhum documento encontrado", "search.result.one": "1 documento encontrado", "search.result.other": "# documentos encontrados", "search.result.placeholder": "Digite para iniciar a busca", "search.result.term.missing": "Ausente", "select.version": "Selecione a vers\u00e3o"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+        <script src="../javascripts/mathjax.js"></script>
+      
+        <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+    
+  </body>
+</html>

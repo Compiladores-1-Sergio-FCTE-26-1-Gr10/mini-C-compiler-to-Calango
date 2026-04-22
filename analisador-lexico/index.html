@@ -1,0 +1,1625 @@
+
+<!doctype html>
+<html lang="pt" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../decisoes-tecnicas/">
+      
+      
+        <link rel="next" href="../analisador-sintatico/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>Analisador Léxico - Mini C Compiler to Calango</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#analisador-lexico" class="md-skip">
+          Pular para conteúdo
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Cabeçalho">
+    <a href=".." title="Mini C Compiler to Calango" class="md-header__button md-logo" aria-label="Mini C Compiler to Calango" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Mini C Compiler to Calango
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Analisador Léxico
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Mudar para modo escuro"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Mudar para modo escuro" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Mudar para modo claro"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Mudar para modo claro" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Buscar" placeholder="Buscar" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Pesquisar">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Limpar" aria-label="Limpar" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Inicializando busca
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navegação" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="Mini C Compiler to Calango" class="md-nav__button md-logo" aria-label="Mini C Compiler to Calango" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Mini C Compiler to Calango
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Gerenciamento
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Gerenciamento
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_1" id="__nav_2_1_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Atas de Reunião
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Atas de Reunião
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../gerenciamento/atas-de-reuniao/ata-15-04/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ata 15/04/26
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../gerenciamento/abordagem-desenvolvimento/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Abordagem de desenvolvimento
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../gerenciamento/planejamento-de-sprints/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Planejamento de sprints
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../escopo/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Escopo do Projeto
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../linguagem-fonte-c/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Linguagem-Fonte Mini C
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../decisoes-tecnicas/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Decisões técnicas
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Analisador Léxico
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Analisador Léxico
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Índice">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Índice
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#gramatica-livre-de-contexto" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Gramática livre de contexto
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Gramática livre de contexto">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#hierarquia-de-chomsky" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Hierarquia de Chomsky
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sintaxe-da-gramatica-livre-de-contexto" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sintaxe da gramática livre de contexto
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#expressoes-regulares" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Expressões regulares
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Expressões regulares">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#fragmentos-auxiliares" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fragmentos auxiliares
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#literais-e-identificadores" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Literais e identificadores
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#tokens" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tokens
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Tokens">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#palavras-reservadas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Palavras reservadas
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#operadores-aritmeticos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Operadores aritméticos
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#operadores-relacionais" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Operadores relacionais
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#operadores-logicos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Operadores lógicos
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#atribuicao" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Atribuição
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#delimitadores" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Delimitadores
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#tratamento-de-erros-simbolos-invalidos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tratamento de erros (símbolos inválidos)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#convecoes-adicionais" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Conveções adicionais
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#bibliografia" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Bibliografia
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#historico-de-versoes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Histórico de Versões
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../analisador-sintatico/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Analisador Sintático
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../problemas-e-solucoes-encontrados/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Problemas e soluções encontrados
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Índice">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Índice
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#gramatica-livre-de-contexto" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Gramática livre de contexto
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Gramática livre de contexto">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#hierarquia-de-chomsky" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Hierarquia de Chomsky
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sintaxe-da-gramatica-livre-de-contexto" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sintaxe da gramática livre de contexto
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#expressoes-regulares" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Expressões regulares
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Expressões regulares">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#fragmentos-auxiliares" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fragmentos auxiliares
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#literais-e-identificadores" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Literais e identificadores
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#tokens" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tokens
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Tokens">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#palavras-reservadas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Palavras reservadas
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#operadores-aritmeticos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Operadores aritméticos
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#operadores-relacionais" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Operadores relacionais
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#operadores-logicos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Operadores lógicos
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#atribuicao" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Atribuição
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#delimitadores" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Delimitadores
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#tratamento-de-erros-simbolos-invalidos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tratamento de erros (símbolos inválidos)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#convecoes-adicionais" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Conveções adicionais
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#bibliografia" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Bibliografia
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#historico-de-versoes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Histórico de Versões
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="analisador-lexico">Analisador lêxico</h1>
+<h2 id="gramatica-livre-de-contexto">Gramática livre de contexto</h2>
+<h3 id="hierarquia-de-chomsky">Hierarquia de Chomsky</h3>
+<p>Para explicar o que é uma gramática livre de contexto deve ser discutido primeiro os conceitos de hierarquia de Chomsky. Proposta por Noam Chomsky em 1959, a hierarquia de Chomsky busca classificar as linguagens em quatro categorias, que vão do tipo 0 ao tipo 3. A Tabela 01 resume os conceitos de cada uma dessas categorias.</p>
+<p><strong>Tabela 01:</strong> Resumo dos tipos de linguagem.</p>
+<table>
+<thead>
+<tr>
+<th>Tipo de linguagem</th>
+<th>Tipo de gramática</th>
+<th>Exemplo</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Regular (Tipo-3)</td>
+<td>Gramática regular</td>
+<td>-</td>
+</tr>
+<tr>
+<td>Livre de contexto (Tipo-2)</td>
+<td>Gramática livre de contexto</td>
+<td>Fortran, Pascal</td>
+</tr>
+<tr>
+<td>Sensível ao contexto (Tipo-1)</td>
+<td>Gramática sensível ao contexto</td>
+<td>-</td>
+</tr>
+<tr>
+<td>Irrestrita (Tipo-0)</td>
+<td>Gramática irrestrita</td>
+<td>-</td>
+</tr>
+</tbody>
+</table>
+<h3 id="sintaxe-da-gramatica-livre-de-contexto">Sintaxe da gramática livre de contexto</h3>
+<p>As gramáticas livre de contexto apresentam quatro diferentes conjuntos de termos, são eles:</p>
+<ul>
+<li><strong><span class="arithmatex">\(V\)</span></strong>: Representa um conjunto de símbolos não-terminais.</li>
+<li><strong><span class="arithmatex">\(\Sigma\)</span>:</strong> Representa um conjunto de símbolos terminais. Os elementos de <span class="arithmatex">\(\Sigma\)</span> são utilizados para definir a sintaxe (estrutura) da linguagem (Tremblay; Sorenson, 2008, p.35). A união dos conjuntos de símbolos não terminais com <span class="arithmatex">\(V\)</span> com os símbolos terminais <span class="arithmatex">\(\Sigma\)</span> é chamada de vocabulário de uma linguagem (Tremblay; Sorenson, 2008, p.35).</li>
+<li><strong><span class="arithmatex">\(P\)</span></strong>: Conjunto de regras que envolve as relações de <span class="arithmatex">\((\Sigma \cup V)*V(\Sigma \cup V)*\)</span> para o conjunto <span class="arithmatex">\((\Sigma \cup V)\)</span> (Tremblay; Sorenson, 2008, p.35).</li>
+<li><strong><span class="arithmatex">\(S\)</span></strong>: Simbolo inicial.</li>
+</ul>
+<h2 id="expressoes-regulares">Expressões regulares</h2>
+<p>As expressões regulares abaixo definem os padrões reconhecidos pelo analisador. A notação utilizada é a do Flex (compatível com POSIX estendido).</p>
+<h3 id="fragmentos-auxiliares">Fragmentos auxiliares</h3>
+<p>Fragmentos são definições nomeadas usadas para compor expressões maiores.</p>
+<p><strong>Tabela 02:</strong> Resumo dos fragmentos auxiliares.</p>
+<table>
+<thead>
+<tr>
+<th>Nome</th>
+<th>Expressão Regular</th>
+<th>Descrição</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>DIGITO</code></td>
+<td><code>[0-9]</code></td>
+<td>Qualquer dígito decimal</td>
+</tr>
+<tr>
+<td><code>LETRA</code></td>
+<td><code>[a-zA-Z_]</code></td>
+<td>Letra maiúscula, minúscula ou underscore</td>
+</tr>
+<tr>
+<td><code>ALFANUM</code></td>
+<td><code>[a-zA-Z0-9_]</code></td>
+<td>Letra, dígito ou underscore</td>
+</tr>
+<tr>
+<td><code>BRANCO</code></td>
+<td><code>[ \t\r]+</code></td>
+<td>Espaços, tabulações e retorno de carro</td>
+</tr>
+<tr>
+<td><code>COM_LINHA</code></td>
+<td><code>\/\/[^\n]*</code></td>
+<td>Comentário de linha (do <code>//</code> até o fim da linha)</td>
+</tr>
+<tr>
+<td><code>COM_BLOCO</code></td>
+<td><code>\/\*([^*]\|\*+[^*/])*\*+\/</code></td>
+<td>Comentário de bloco <code>/* ... */</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="literais-e-identificadores">Literais e identificadores</h3>
+<p><strong>Tabela 03:</strong> Resumo dos literais e identificadores.</p>
+<table>
+<thead>
+<tr>
+<th>Token</th>
+<th>Expressão Regular</th>
+<th>Descrição</th>
+<th>Exemplo</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ID</code></td>
+<td><code>[a-zA-Z_][a-zA-Z0-9_]*</code></td>
+<td>Identificador: começa com letra ou <code>_</code>, seguido de letras, dígitos ou <code>_</code></td>
+<td><code>x</code>, <code>minhaVar</code>, <code>_aux1</code></td>
+</tr>
+<tr>
+<td><code>LIT_INT</code></td>
+<td><code>[0-9]+</code></td>
+<td>Sequência de um ou mais dígitos</td>
+<td><code>0</code>, <code>42</code>, <code>1000</code></td>
+</tr>
+<tr>
+<td><code>LIT_FLOAT</code></td>
+<td><code>[0-9]+\.[0-9]+</code></td>
+<td>Parte inteira, ponto obrigatório, parte decimal</td>
+<td><code>3.14</code>, <code>0.5</code>, <code>100.0</code></td>
+</tr>
+<tr>
+<td><code>LIT_CHAR</code></td>
+<td><code>'([^'\\]\|\\.)'</code></td>
+<td>Caractere entre aspas simples, com suporte a escapes</td>
+<td><code>'a'</code>, <code>'\n'</code>, <code>'\\'</code></td>
+</tr>
+<tr>
+<td><code>LIT_STRING</code></td>
+<td><code>\"([^\"\\]\|\\.)*\"</code></td>
+<td>Sequência de caracteres entre aspas duplas, com suporte a escapes</td>
+<td><code>"ola"</code>, <code>"x\n"</code></td>
+</tr>
+<tr>
+<td><code>LIT_TRUE</code></td>
+<td><code>true</code></td>
+<td>Literal booleano verdadeiro → <code>VERDADEIRO</code> no Calango</td>
+<td><code>true</code></td>
+</tr>
+<tr>
+<td><code>LIT_FALSE</code></td>
+<td><code>false</code></td>
+<td>Literal booleano falso → <code>FALSO</code> no Calango</td>
+<td><code>false</code></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>Nota:</strong> A regra de <code>LIT_FLOAT</code> é posicionada <strong>antes</strong> de <code>LIT_INT</code> no arquivo <code>.l</code>. Isso garante que <code>3.14</code> seja reconhecido como um único token flutuante, e não como <code>3</code> (inteiro) + <code>.</code> (ponto) + <code>14</code> (inteiro).</p>
+<p><strong>Nota:</strong> As palavras reservadas (<code>int</code>, <code>if</code>, <code>while</code>, etc.) são posicionadas <strong>antes</strong> da regra de <code>ID</code>. O Flex aplica a primeira regra que corresponder ao texto, portanto <code>if</code> nunca será classificado como identificador.</p>
+</blockquote>
+<h2 id="tokens">Tokens</h2>
+<h3 id="palavras-reservadas">Palavras reservadas</h3>
+<p><strong>Tabela 04:</strong> Resumo das palavras reservadas.</p>
+<table>
+<thead>
+<tr>
+<th>Token</th>
+<th>Lexema</th>
+<th>Equivalente no Calango</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>KW_INT</code></td>
+<td><code>int</code></td>
+<td><code>inteiro</code></td>
+</tr>
+<tr>
+<td><code>KW_FLOAT</code></td>
+<td><code>float</code></td>
+<td><code>real</code></td>
+</tr>
+<tr>
+<td><code>KW_CHAR</code></td>
+<td><code>char</code></td>
+<td><code>caracter</code></td>
+</tr>
+<tr>
+<td><code>KW_BOOL</code></td>
+<td><code>bool</code></td>
+<td><code>logico</code></td>
+</tr>
+<tr>
+<td><code>KW_IF</code></td>
+<td><code>if</code></td>
+<td><code>se ... entao</code></td>
+</tr>
+<tr>
+<td><code>KW_ELSE</code></td>
+<td><code>else</code></td>
+<td><code>senao</code></td>
+</tr>
+<tr>
+<td><code>KW_WHILE</code></td>
+<td><code>while</code></td>
+<td><code>enquanto ... faca</code></td>
+</tr>
+<tr>
+<td><code>KW_FOR</code></td>
+<td><code>for</code></td>
+<td><code>para ... faca</code></td>
+</tr>
+<tr>
+<td><code>KW_DO</code></td>
+<td><code>do</code></td>
+<td><code>faca</code> (parte do <code>faca...enquanto</code>)</td>
+</tr>
+<tr>
+<td><code>KW_PRINTF</code></td>
+<td><code>printf</code></td>
+<td><code>escreva</code> / <code>escreval</code></td>
+</tr>
+<tr>
+<td><code>KW_SCANF</code></td>
+<td><code>scanf</code></td>
+<td><code>leia</code> / <code>leiaCaracter</code></td>
+</tr>
+<tr>
+<td><code>KW_MAIN</code></td>
+<td><code>main</code></td>
+<td>bloco <code>principal</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="operadores-aritmeticos">Operadores aritméticos</h3>
+<p><strong>Tabela 05:</strong> Resumo dos tokens de operadores aritméticos.</p>
+<table>
+<thead>
+<tr>
+<th>Token</th>
+<th>Lexema</th>
+<th>Equivalente no Calango</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>PLUS</code></td>
+<td><code>+</code></td>
+<td><code>+</code></td>
+</tr>
+<tr>
+<td><code>MINUS</code></td>
+<td><code>-</code></td>
+<td><code>-</code></td>
+</tr>
+<tr>
+<td><code>TIMES</code></td>
+<td><code>*</code></td>
+<td><code>*</code></td>
+</tr>
+<tr>
+<td><code>DIVIDE</code></td>
+<td><code>/</code></td>
+<td><code>/</code> (real) ou <code>\</code> (inteiro, decidido na geração de código)</td>
+</tr>
+<tr>
+<td><code>MOD</code></td>
+<td><code>%</code></td>
+<td><code>mod</code></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>Nota sobre divisão:</strong> Em C, <code>/</code> entre dois inteiros realiza divisão inteira. No Calango, <code>/</code> é sempre divisão real e <code>\</code> é divisão inteira. A distinção é <strong>semântica</strong> (depende dos tipos dos operandos) e será resolvida na fase de geração de código, não no léxico.</p>
+</blockquote>
+<h3 id="operadores-relacionais">Operadores relacionais</h3>
+<p><strong>Tabela 06:</strong> Resumo dos operadores relacionais.</p>
+<table>
+<thead>
+<tr>
+<th>Token</th>
+<th>Lexema</th>
+<th>Equivalente no Calango</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>EQ</code></td>
+<td><code>==</code></td>
+<td><code>==</code></td>
+</tr>
+<tr>
+<td><code>NEQ</code></td>
+<td><code>!=</code></td>
+<td><code>!=</code></td>
+</tr>
+<tr>
+<td><code>LT</code></td>
+<td><code>&lt;</code></td>
+<td><code>&lt;</code></td>
+</tr>
+<tr>
+<td><code>GT</code></td>
+<td><code>&gt;</code></td>
+<td><code>&gt;</code></td>
+</tr>
+<tr>
+<td><code>LEQ</code></td>
+<td><code>&lt;=</code></td>
+<td><code>&lt;=</code></td>
+</tr>
+<tr>
+<td><code>GEQ</code></td>
+<td><code>&gt;=</code></td>
+<td><code>&gt;=</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="operadores-logicos">Operadores lógicos</h3>
+<p><strong>Tabela 07:</strong> Resume dos tokens de operadores lógicos.</p>
+<table>
+<thead>
+<tr>
+<th>Token</th>
+<th>Lexema</th>
+<th>Equivalente no Calango</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>AND</code></td>
+<td><code>&amp;&amp;</code></td>
+<td><code>e</code></td>
+</tr>
+<tr>
+<td><code>OR</code></td>
+<td><code>\|\|</code></td>
+<td><code>ou</code></td>
+</tr>
+<tr>
+<td><code>NOT</code></td>
+<td><code>!</code></td>
+<td><code>nao</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="atribuicao">Atribuição</h3>
+<p><strong>Tabela 08:</strong> Resumo dos tokens de atribuição.</p>
+<table>
+<thead>
+<tr>
+<th>Token</th>
+<th>Lexema</th>
+<th>Observação</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ASSIGN</code></td>
+<td><code>=</code></td>
+<td>Única forma de atribuição suportada</td>
+</tr>
+</tbody>
+</table>
+<h3 id="delimitadores">Delimitadores</h3>
+<p><strong>Tabela 09:</strong> Resumo dos tokens de delimitação.</p>
+<table>
+<thead>
+<tr>
+<th>Token</th>
+<th>Lexema</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>LPAREN</code></td>
+<td><code>(</code></td>
+</tr>
+<tr>
+<td><code>RPAREN</code></td>
+<td><code>)</code></td>
+</tr>
+<tr>
+<td><code>LBRACE</code></td>
+<td><code>{</code></td>
+</tr>
+<tr>
+<td><code>RBRACE</code></td>
+<td><code>}</code></td>
+</tr>
+<tr>
+<td><code>LBRACKET</code></td>
+<td><code>[</code></td>
+</tr>
+<tr>
+<td><code>RBRACKET</code></td>
+<td><code>]</code></td>
+</tr>
+<tr>
+<td><code>SEMICOLON</code></td>
+<td><code>;</code></td>
+</tr>
+<tr>
+<td><code>COMMA</code></td>
+<td><code>,</code></td>
+</tr>
+<tr>
+<td><code>DOT</code></td>
+<td><code>.</code></td>
+</tr>
+</tbody>
+</table>
+<h2 id="tratamento-de-erros-simbolos-invalidos">Tratamento de erros (símbolos inválidos)</h2>
+<p>O analisador distingue dois tipos de erro léxico:</p>
+<p><strong>Símbolos fora do escopo</strong> — operadores que existem em C mas não têm equivalente no Calango. O lexer os reconhece explicitamente e emite uma mensagem informativa com sugestão de correção quando possível:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>ERRO LÉXICO [linha 5, col 3]: &#39;++&#39; fora do escopo. Use &#39;= x + 1&#39;.
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>ERRO LÉXICO [linha 7, col 8]: &#39;+=&#39; fora do escopo.
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>ERRO LÉXICO [linha 9, col 2]: &#39;&amp;&#39; (endereço/bitwise) fora do escopo.
+</span></code></pre></div>
+<p><strong>Símbolos desconhecidos</strong> — qualquer caractere que não se enquadra em nenhuma regra definida:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>ERRO LÉXICO [linha 3, col 5]: símbolo desconhecido &#39;@&#39;.
+</span></code></pre></div>
+<p>Em ambos os casos, o analisador <strong>não interrompe</strong> a execução — continua processando o restante do arquivo para reportar o máximo de erros possível em uma única passagem.</p>
+<h2 id="convecoes-adicionais">Conveções adicionais</h2>
+<ul>
+<li><strong>Case-sensitive:</strong> Mini C é case-sensitive, assim como C. <code>Int</code> e <code>int</code> são tokens diferentes (o primeiro seria um <code>ID</code>, o segundo <code>KW_INT</code>).</li>
+<li><strong>Rastreamento de posição:</strong> Linha e coluna são mantidos manualmente para cada token, permitindo mensagens de erro precisas nas fases subsequentes do compilador.</li>
+<li><strong>Comentários são descartados:</strong> Tanto comentários de linha (<code>//</code>) quanto de bloco (<code>/* */</code>) são consumidos pelo lexer e não geram tokens.</li>
+<li><strong>Espaços são descartados:</strong> Espaços, tabulações e quebras de linha são usados apenas para atualizar os contadores de posição.</li>
+</ul>
+<h2 id="bibliografia">Bibliografia</h2>
+<ol>
+<li>TREMBLAY, Jean-Paul; SORENSON, Paul G. <strong>The Theory and Practice of Compiler Writing</strong>. 1ª edição. 2008.</li>
+</ol>
+<h2 id="historico-de-versoes">Histórico de Versões</h2>
+<table>
+<thead>
+<tr>
+<th>Versão</th>
+<th>Descrição</th>
+<th>Data</th>
+<th>Responsável</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>0.1</code></td>
+<td>Criação da página e início da documentação.</td>
+<td>08/04/2026</td>
+<td><a href="">@Luiz</a></td>
+</tr>
+<tr>
+<td><code>0.2</code></td>
+<td>Melhorias na documentação do analisador léxico.</td>
+<td>08/04/2026</td>
+<td><a href="https://github.com/luizfaria1989">@Luiz Faria</a>, <a href="https://github.com/Jadequilin">@João Pedro</a>,  <a href="https://github.com/RivaFilho">@Rivaldâvio</a></td>
+</tr>
+</tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["search.suggest", "content.code.copy"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copiado para \u00e1rea de transfer\u00eancia", "clipboard.copy": "Copiar para \u00e1rea de transfer\u00eancia", "search.result.more.one": "mais 1 nesta p\u00e1gina", "search.result.more.other": "# mais nesta p\u00e1gina", "search.result.none": "Nenhum documento encontrado", "search.result.one": "1 documento encontrado", "search.result.other": "# documentos encontrados", "search.result.placeholder": "Digite para iniciar a busca", "search.result.term.missing": "Ausente", "select.version": "Selecione a vers\u00e3o"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+        <script src="../javascripts/mathjax.js"></script>
+      
+        <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+    
+  </body>
+</html>

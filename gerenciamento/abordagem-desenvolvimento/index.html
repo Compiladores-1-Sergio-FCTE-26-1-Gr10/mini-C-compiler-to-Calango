@@ -1,0 +1,916 @@
+
+<!doctype html>
+<html lang="pt" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../atas-de-reuniao/ata-15-04/">
+      
+      
+        <link rel="next" href="../planejamento-de-sprints/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>Abordagem de desenvolvimento - Mini C Compiler to Calango</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#abordagem-de-desenvolvimento-tdd-adaptada-para-dev-de-compiladores" class="md-skip">
+          Pular para conteúdo
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Cabeçalho">
+    <a href="../.." title="Mini C Compiler to Calango" class="md-header__button md-logo" aria-label="Mini C Compiler to Calango" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Mini C Compiler to Calango
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Abordagem de desenvolvimento
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Mudar para modo escuro"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Mudar para modo escuro" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Mudar para modo claro"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Mudar para modo claro" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Buscar" placeholder="Buscar" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Pesquisar">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Limpar" aria-label="Limpar" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Inicializando busca
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navegação" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Mini C Compiler to Calango" class="md-nav__button md-logo" aria-label="Mini C Compiler to Calango" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Mini C Compiler to Calango
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Gerenciamento
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Gerenciamento
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_1" id="__nav_2_1_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Atas de Reunião
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Atas de Reunião
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../atas-de-reuniao/ata-15-04/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ata 15/04/26
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Abordagem de desenvolvimento
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Abordagem de desenvolvimento
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Índice">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Índice
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#introducao" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Introdução
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Introdução">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#objetivo-e-motivacao-da-abordagem-tdd-adaptada" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Objetivo e Motivação da Abordagem TDD Adaptada
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../planejamento-de-sprints/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Planejamento de sprints
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../escopo/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Escopo do Projeto
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../linguagem-fonte-c/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Linguagem-Fonte Mini C
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../decisoes-tecnicas/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Decisões técnicas
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../analisador-lexico/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Analisador Léxico
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../analisador-sintatico/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Analisador Sintático
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../problemas-e-solucoes-encontrados/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Problemas e soluções encontrados
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Índice">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Índice
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#introducao" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Introdução
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Introdução">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#objetivo-e-motivacao-da-abordagem-tdd-adaptada" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Objetivo e Motivação da Abordagem TDD Adaptada
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="abordagem-de-desenvolvimento-tdd-adaptada-para-dev-de-compiladores">Abordagem de Desenvolvimento: TDD Adaptada para Dev. de Compiladores</h1>
+<h2 id="introducao">Introdução</h2>
+<p>O Desenvolvimento Guiado por Testes (do inglês, <em>Test-Driven Development</em> - TDD) é uma prática de engenharia de software que inverte a lógica tradicional de programação. Em vez de escrever o código da aplicação e depois testá-lo, o desenvolvedor escreve o teste automatizado antes mesmo da funcionalidade existir. Segundo Beck (2002, p. 9), o TDD baseia-se em uma premissa simples, onde "o código de teste é escrito antes do código de produção", garantindo que todo novo comportamento seja verificado desde a sua concepção.</p>
+<p>O TDD tradicional é regido pelo ciclo de feedback ultra-curto conhecido como <strong>Red-Green-Refactor</strong>:</p>
+<ol>
+<li><strong>Red (Vermelho):</strong> Escrever um teste que falha (pois a funcionalidade ainda não existe).</li>
+<li><strong>Green (Verde):</strong> Escrever o código mínimo e mais simples possível para fazer o teste passar.</li>
+<li><strong>Refactor (Azul):</strong> Melhorar a qualidade do código (limpeza, padrões, otimização) com a segurança de que o teste continuará passando.</li>
+</ol>
+<h3 id="objetivo-e-motivacao-da-abordagem-tdd-adaptada">Objetivo e Motivação da Abordagem TDD Adaptada</h3>
+<p>Construir um compilador (ou, neste caso, um transpilador de Mini-C para Calango) apresenta desafios arquiteturais únicos. A geração de analisadores léxicos e sintáticos através de ferramentas como Flex e Bison produz código C gerado automaticamente. Aplicar o TDD clássico (testes unitários em funções internas) a códigos gerados por máquinas é ineficiente e frágil. </p>
+<p>Além disso, gramáticas livres de contexto são altamente acopladas. Como alertam Aho et al. (2007, p. 201), "a adição de uma nova regra de produção em um analisador sintático pode introduzir ambiguidades não intencionais", resultando nos temidos conflitos de <em>Shift/Reduce</em>. </p>
+<p>Portanto, a motivação para a <strong>Abordagem TDD Adaptada</strong> é criar uma rede de segurança contra regressões sistêmicas durante a evolução da gramática da linguagem Mini-C, focando no comportamento externo (Caixa Preta) da tradução, e não na estrutura interna das funções em C, garantindo que o mapeamento semântico para a linguagem Calango ocorra de forma determinística e incremental.</p>
+<h1 id="metodologia">Metodologia</h1>
+<p>A aplicação do TDD no contexto deste projeto exigiu uma reavaliação dos princípios originais para se adequar ao pipeline do Flex/Bison.</p>
+<p><strong>Princípios Mantidos:</strong></p>
+<ul>
+<li><strong>Test-First:</strong> Nenhum token ou regra gramatical é adicionado ao <code>.l</code> ou <code>.y</code> sem que exista um caso de uso documentado em um teste falho.</li>
+<li><strong>Prevenção de Regressão:</strong> A suíte de testes atua como a documentação viva e o contrato de funcionamento da gramática.</li>
+<li><strong>Ciclo Incremental:</strong> A linguagem será construída estrutura por estrutura (ex: primeiro variáveis, depois operações aritméticas, depois laços de repetição).</li>
+</ul>
+<p><strong>Princípios Ajustados:</strong></p>
+<ul>
+<li><strong>Mudança de Granularidade (De Unitário para Integração):</strong> Em vez de testar funções C isoladas (<code>yylex()</code> ou <code>yyparse()</code>), os testes são de integração fundamentados em arquivos físicos. Avalia-se a entrada de um arquivo <code>.c</code> válido e a saída gerada em um arquivo <code>.cal</code>.</li>
+<li><strong>Caixa Preta do Analisador:</strong> A estrutura interna da Árvore Sintática Abstrata (AST) não é acoplada aos testes, permitindo refatorações estruturais profundas no compilador sem quebrar a suíte de validação, desde que o código final em Calango permaneça correto.</li>
+</ul>
+<h3 id="o-novo-ciclo-passo-a-passo">O Novo Ciclo (Passo a Passo)</h3>
+<p>O fluxo de trabalho durante o desenvolvimento do compilador seguirá a seguinte esteira:</p>
+<ol>
+<li><strong>Especificação (Red):</strong> Cria-se um arquivo de entrada em Mini-C (ex: <code>teste_soma.c</code>) com uma construção de linguagem específica, e um arquivo de gabarito com a saída esperada (ex: <code>esperado_soma.cal</code>).</li>
+<li><strong>Execução Inicial:</strong> Roda-se o <em>script</em> de automação de testes. O teste falhará apontando erro léxico/sintático, pois o compilador ainda não reconhece a construção.</li>
+<li>
+<p><strong>Implementação (Código de Produção):</strong></p>
+<ul>
+<li>Adição de expressões regulares no analisador léxico (<code>.l</code>).</li>
+<li>Definição de regras de produção e construção da AST no analisador sintático (<code>.y</code>).</li>
+<li>Atualização do módulo de percurso da árvore (<em>Tree Walker</em>) para emitir o código em Calango.</li>
+<li><strong>Validação (Green):</strong> Executa-se a suíte de testes novamente. O <em>script</em> compilará o código de entrada e fará um <em>diff</em> rigoroso entre a saída gerada e o arquivo <code>.cal</code> esperado. Se o código de saída for <code>0</code> (sem diferenças), o teste passa.</li>
+<li><strong>Refatoração (Blue):</strong> Limpeza do código C desenvolvido para gerenciar a Tabela de Símbolos, eliminação de duplicações nas ações semânticas do Bison e otimização de memória.</li>
+<li><strong>Commit:</strong> O ciclo é finalizado e o código versionado.</li>
+</ul>
+</li>
+</ol>
+<h3 id="requisitos-e-ferramentas-necessarias">Requisitos e Ferramentas Necessárias</h3>
+<p>Para o adequado funcionamento da metodologia e do ambiente de desenvolvimento, são necessários:</p>
+<ul>
+<li><strong>Ambiente Linux:</strong> Preferencialmente WSL (Windows Subsystem for Linux) rodando distribuição Ubuntu.</li>
+<li><strong>Ferramentas de Compilação:</strong> <code>gcc</code> ou <code>clang</code>, e <code>make</code> (via pacote <code>build-essential</code>).</li>
+<li><strong>Geradores de Analisadores:</strong> <code>flex</code> e <code>bison</code> devidamente instalados e no <em>PATH</em> do sistema.</li>
+<li><strong>Automação de Testes:</strong> Um <em>script</em> local (escrito em <em>Bash</em>, <em>Python</em> ou outro) capaz de iterar sobre um diretório <code>tests/</code>, passar os arquivos pelo binário do compilador e comparar as saídas utilizando utilitários como <code>diff</code>.</li>
+</ul>
+<h3 id="visao-cicd-validacao-continua-no-github">Visão CI/CD: Validação Contínua no GitHub</h3>
+<p>A segurança do TDD adaptado será potencializada por um pipeline de Integração Contínua (CI). O fluxo de <em>merge</em> para a ramificação principal (<code>main</code>) será protegido por automatizações do <strong>GitHub Actions</strong>.</p>
+<p><strong>Pipeline de Validação:</strong></p>
+<ol>
+<li><strong>Gatilho:</strong> Abertura ou atualização de um <em>Pull Request</em> direcionado à <code>main</code>.</li>
+<li><strong>Provisionamento:</strong> O GitHub Actions inicializa um <em>runner</em> Ubuntu.</li>
+<li><strong>Configuração de Ambiente:</strong> Instalação automática das dependências (<code>sudo apt-get install flex bison build-essential</code>).</li>
+<li><strong>Build:</strong> Execução do comando <code>make</code> para compilar os arquivos <code>.l</code> e <code>.y</code> e gerar o executável do transpilador.</li>
+<li><strong>Testes Automatizados:</strong> Execução do comando <code>make test</code>, que aciona o <em>script</em> validador rodando toda a suíte de <code>.c</code> para <code>.cal</code>.</li>
+<li><strong>Critério de Aceite:</strong> O <em>merge</em> da ramificação só será liberado (<em>Merge Block</em>) se o <em>runner</em> reportar que 100% dos testes passaram, garantindo que o código novo não quebrou gramáticas antigas.</li>
+</ol>
+<h1 id="referencias">Referências</h1>
+<p>AHO, Alfred V.; LAM, Monica S.; SETHI, Ravi; ULLMAN, Jeffrey D. <em>Compiladores: princípios, técnicas e ferramentas</em>. 2. ed. São Paulo: Pearson Addison-Wesley, 2007.</p>
+<p>BECK, Kent. <em>Test-Driven Development: By Example</em>. 1. ed. Boston: Addison-Wesley Professional, 2002.</p>
+<p><a href="https://github.com/thmasq/mini-c-compiler">thmasq/mini-c-compiler</a></p>
+<hr />
+<h2 id="historico-de-versoes">Histórico de Versões</h2>
+<table>
+<thead>
+<tr>
+<th>Versão</th>
+<th>Descrição</th>
+<th>Data</th>
+<th>Autor</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1.0</td>
+<td>Primeira versão do documento de metodologia TDD Adaptada</td>
+<td>15/04/2026</td>
+<td><a href="https://github.com/MVConsorte">@Mateus</a></td>
+</tr>
+<tr>
+<td>1.1</td>
+<td>Ajuste do render</td>
+<td>15/04/2026</td>
+<td><a href="https://github.com/MVConsorte">@Mateus</a></td>
+</tr>
+</tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["search.suggest", "content.code.copy"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copiado para \u00e1rea de transfer\u00eancia", "clipboard.copy": "Copiar para \u00e1rea de transfer\u00eancia", "search.result.more.one": "mais 1 nesta p\u00e1gina", "search.result.more.other": "# mais nesta p\u00e1gina", "search.result.none": "Nenhum documento encontrado", "search.result.one": "1 documento encontrado", "search.result.other": "# documentos encontrados", "search.result.placeholder": "Digite para iniciar a busca", "search.result.term.missing": "Ausente", "select.version": "Selecione a vers\u00e3o"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+        <script src="../../javascripts/mathjax.js"></script>
+      
+        <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+    
+  </body>
+</html>
