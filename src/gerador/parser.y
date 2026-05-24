@@ -1,14 +1,9 @@
 %{
 /*
- * Analisador Sintático + Semântico — Mini C Compiler to Calango
+ * Gerador de Código — Mini C Compiler to Calango
  * Disciplina: FGA0003 – Compiladores 1 (2026/1)
- * Professor: Dr. Sergio Antônio Andrade de Freitas
  *
- * Esta fase:
- *   - Constrói a AST (Árvore Sintática Abstrata)
- *   - Mantém tabela de símbolos com escopo, tipo, inicialização e uso
- *   - Verifica: redeclaração, uso de variável não declarada,
- *               variável não inicializada
+ * Faz análise semântica + constrói AST + gera código Calango.
  */
 
 #include <stdio.h>
@@ -17,6 +12,7 @@
 
 #include "tabela.h"
 #include "ast.h"
+#include "gerador.h"
 
 extern int   yylex(void);
 extern char *yytext;
@@ -89,20 +85,11 @@ programa
             raiz_ast = n;
             $$ = n;
 
-            printf("\n╔══════════════════════════════════════╗\n");
-            printf("║     Análise semântica concluída      ║\n");
-            if (erros_sem == 0)
-                printf("║     Nenhum erro semântico            ║\n");
-            else
-                printf("║     %d erro(s) semântico(s)           ║\n", erros_sem);
-            printf("╚══════════════════════════════════════╝\n");
-
-            imprimirTabela();
-
-            printf("\n╔══════════════════════════════════════╗\n");
-            printf("║      AST — Árvore Sintática          ║\n");
-            printf("╚══════════════════════════════════════╝\n");
-            ast_imprime(raiz_ast, 0);
+            if (erros_sem > 0) {
+                fprintf(stderr, "\n%d erro(s) semântico(s). Geração cancelada.\n", erros_sem);
+            } else {
+                gerar(raiz_ast, stdout);
+            }
         }
     ;
 
@@ -338,9 +325,9 @@ expressao
     | ID
         {
             Simbolo *s = buscarSimbolo($1);
-            if (!s) {
+            if (!s)
                 erro_sem(linha, "variável '%s' não declarada.", $1);
-            } else {
+            else {
                 if (!s->inicializado)
                     fprintf(stderr,
                         "AVISO SEMÂNTICO [linha %d]: '%s' usada sem inicialização.\n",
