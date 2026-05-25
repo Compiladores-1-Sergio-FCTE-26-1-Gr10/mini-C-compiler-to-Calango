@@ -1,1 +1,46 @@
-*site/
+# ══════════════════════════════════════════════════════════════════════
+# .gitignore — Mini C Compiler to Calango
+# FGA0003 – Compiladores 1 (2026/1)
+# ══════════════════════════════════════════════════════════════════════
+
+# ── Binários gerados pelo make ─────────────────────────────────────────
+minic_lexico
+minic_sintatico
+minic_semantico
+minic_gerador
+
+# ── Arquivos gerados pelo Flex ─────────────────────────────────────────
+src/lexico/lex.yy.c
+src/sintatico/lex.yy.c
+src/semantico/lex.yy.c
+src/gerador/lex.yy.c
+
+# ── Arquivos gerados pelo Bison ────────────────────────────────────────
+src/sintatico/parser.tab.c
+src/sintatico/parser.tab.h
+src/semantico/parser.tab.c
+src/semantico/parser.tab.h
+src/gerador/parser.tab.c
+src/gerador/parser.tab.h
+
+# ── Arquivos de objeto ─────────────────────────────────────────────────
+*.o
+*.a
+
+# ── Saídas de teste ────────────────────────────────────────────────────
+*.cal
+testes/**/*.out
+
+# ── Editores ───────────────────────────────────────────────────────────
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# ── Sistema operacional ────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+
+# ── Logs e temporários ─────────────────────────────────────────────────
+*.log
