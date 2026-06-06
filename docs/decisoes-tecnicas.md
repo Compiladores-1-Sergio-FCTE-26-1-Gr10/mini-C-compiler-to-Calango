@@ -13,6 +13,13 @@ Esta página registra as principais decisões técnicas tomadas pelo grupo ao lo
 | **Flex** | Geração do analisador léxico | Ferramenta padrão da disciplina; gera AFD automaticamente a partir de expressões regulares |
 | **Bison** | Geração do analisador sintático | Complementar ao Flex; gera parser LALR(1) a partir de gramáticas livres de contexto |
 | **C** | Linguagem de implementação | Integração nativa com Flex e Bison; controle fino sobre estruturas de dados |
+| **VS Code** | Editor de código-fonte (IDE) | Ambiente de desenvolvimento com suporte nativo/plugins para C, Flex, Bison e visualização de documentação |
+| **Markdown** | Linguagem de marcação | Sintaxe limpa, legível e padronizada, ideal para focar no conteúdo técnico sem se preocupar com complexidades de formatação visual |
+| **MkDocs** | Gerador de site estático | Compila rapidamente os arquivos Markdown em um site de documentação navegável, estruturado e com aspecto profissional |
+| **Git** | Controle de versão de código | Permite o rastreamento seguro do histórico de alterações e viabiliza o desenvolvimento paralelo do código entre os membros da equipe |
+| **GitHub** | Hospedagem do repositório remoto | Centraliza o código-fonte na nuvem, facilitando o trabalho colaborativo, o backup do projeto e a revisão de código |
+| **GitHub Pages** | Hospedagem da documentação online | Integração nativa com o GitHub que permite publicar o site gerado pelo MkDocs de forma automatizada e gratuita |
+| **Microsoft Teams** | Comunicação e gestão da equipe | Plataforma institucional que centraliza reuniões por vídeos |
 
 ---
 
@@ -135,3 +142,4 @@ O operador de resto `%` do Mini C é mapeado para `mod` do Calango. A tradução
 | ------ | --------- | ---- | ----------- |
 | `0.1` | Criação da página. | 08/04/2026 | [@Luiz Faria](https://github.com/luizfaria1989) |
 | `0.2` | Início da documentação das decisões técnicas do projeto. | 11/04/2026 | [@Luiz Faria](https://github.com/luizfaria1989), [@João Pedro](https://github.com/Jadequilin),  [@Rivaldâvio](https://github.com/RivaFilho) |
+| `0.3` | Incrementa tabela de ferramentas escolhidas. | 21/04/2026 | [@Luiz Faria](https://github.com/luizfaria1989) |
