@@ -54,7 +54,11 @@ nav:
   - Decisões técnicas: decisoes-tecnicas.md
   - Analisador Léxico: analisador-lexico.md
   - Analisador Sintático: analisador-sintatico.md
+  - Árvore Sintática Abstrata: arvore-sintatica-abstrata.md
+  - Geração de Código: geracao-de-codigo.md
   - Problemas e soluções encontrados: problemas-e-solucoes-encontrados.md
+  - Otimizações do Compilador: otimizacoes.md
+  - Suite de Testes: suite-de-testes.md
 
 extra_css:
   - stylesheets/extra.css
