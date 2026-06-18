@@ -88,7 +88,7 @@ programa
             if (erros_sem > 0) {
                 fprintf(stderr, "\n%d erro(s) semântico(s). Geração cancelada.\n", erros_sem);
             } else {
-                gerar(raiz_ast, stdout);
+                gerarASTOtimizada(raiz_ast, stdout);
             }
         }
     ;

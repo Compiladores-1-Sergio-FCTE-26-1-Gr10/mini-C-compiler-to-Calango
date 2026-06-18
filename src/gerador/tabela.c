@@ -281,3 +281,26 @@ const char *resultadoNot(const char *tipo) {
 
     return "invalid";
 }
+
+void removerVariaveisMortas(void) {
+    Simbolo *atual = tabela;
+    Simbolo *anterior = NULL;
+
+    while (atual != NULL) {
+        if (!atual->usado) {
+            Simbolo *removido = atual;
+
+            if (anterior == NULL) {
+                tabela = atual->prox;
+            } else {
+                anterior->prox = atual->prox;
+            }
+
+            atual = atual->prox;
+            free(removido);
+        } else {
+            anterior = atual;
+            atual = atual->prox;
+        }
+    }
+}

@@ -293,3 +293,13 @@ static void gen_lista(No *n, FILE *out, int nivel) {
 void gerar(No *raiz, FILE *saida) {
     if (raiz) gen_no(raiz, saida, 0);
 }
+
+
+void gerarASTOtimizada(No *raiz, FILE *saida) {
+    if (!raiz || !saida) {
+        return;
+    }
+
+    otimizarAST(raiz);
+    gerar(raiz, saida);
+}

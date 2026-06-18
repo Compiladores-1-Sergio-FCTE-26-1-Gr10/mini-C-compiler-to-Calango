@@ -1,0 +1,30 @@
+name: Build and Test Compiler
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up C environment
+        run: sudo apt-get update && sudo apt-get install -y build-essential flex bison
+
+      - name: Build all
+        run: make all
+
+      - name: Run lexical, syntactic, semantic and generator tests
+        run: make test
+
+      - name: Archive tests
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-artifacts
+          path: ./testes/**

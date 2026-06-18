@@ -115,4 +115,7 @@ void ast_imprime(No *n, int nivel);
 /* Libera toda a árvore */
 void ast_libera(No *n);
 
+/* Otimiza a AST in-place: constant folding, simplificações algébricas e remoção de variáveis mortas em listas de declarações/instruções. */
+void otimizarAST(No *n);
+
 #endif /* AST_H */

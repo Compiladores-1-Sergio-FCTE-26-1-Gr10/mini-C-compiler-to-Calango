@@ -41,4 +41,7 @@ const char *resultadoOperacaoLogica(const char *tipoEsq, const char *tipoDir);
 const char *resultadoMenosUnario(const char *tipo);
 const char *resultadoNot(const char *tipo);
 
+/* Remove da tabela símbolos que nunca foram marcados como usados. */
+void removerVariaveisMortas(void);
+
 #endif

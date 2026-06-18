@@ -27,4 +27,7 @@
 /* Gera código Calango a partir da AST, escrevendo em `saida` */
 void gerar(No *raiz, FILE *saida);
 
+/* Otimiza a AST antes da geração e emite o código Calango final. */
+void gerarASTOtimizada(No *raiz, FILE *saida);
+
 #endif /* GERADOR_H */
