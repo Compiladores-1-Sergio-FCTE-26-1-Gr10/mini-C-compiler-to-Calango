@@ -6,13 +6,14 @@
 #   make            → compila todas as fases
 #   make lexico     → compila só o analisador léxico
 #   make sintatico  → compila só o analisador sintático
-#   make semantico  → compila só o analisador semântico + AST
+#   make semantico  → compila o analisador semântico + AST
 #   make gerador    → compila o gerador de código Calango
 #   make test       → roda todos os testes
 #   make test-lex   → testes do léxico
 #   make test-sint  → testes do sintático
 #   make test-sem   → testes do semântico
-#   make test-ger   → testes do gerador
+#   make test-ger   → testes básicos do gerador
+#   make test-ger   → testes das otimizações do gerador
 #   make clean      → remove arquivos gerados
 # ══════════════════════════════════════════════════════════════════════
 
@@ -106,19 +107,22 @@ $(GER_DIR)/lex.yy.c: $(GER_DIR)/lexer.l $(GER_DIR)/parser.tab.h
 # ─────────────────────────────────────────────────────────────────────
 # TESTES
 # ─────────────────────────────────────────────────────────────────────
-test: test-lex test-sint test-sem test-ger
+test: test-lex test-sint test-sem test-ger test-ger
 
 test-lex: minic_lexico
-	@$(call rodar_testes,$(TEST_LEX),./minic_lexico,"Léxico")
+	@$(call rodar_testes,$(TEST_LEX),./minic_lexico,"Léxico",*.c)
 
 test-sint: minic_sintatico
-	@$(call rodar_testes,$(TEST_SINT),./minic_sintatico,"Sintático")
+	@$(call rodar_testes,$(TEST_SINT),./minic_sintatico,"Sintático",*.c)
 
 test-sem: minic_semantico
-	@$(call rodar_testes,$(TEST_SEM),./minic_semantico,"Semântico")
+	@$(call rodar_testes,$(TEST_SEM),./minic_semantico,"Semântico",*.c)
 
 test-ger: minic_gerador
-	@$(call rodar_testes,$(TEST_GER),./minic_gerador,"Gerador")
+	@$(call rodar_testes,$(TEST_GER),./minic_gerador,"Gerador",teste_0[1-5]_*.c)
+
+test-ger: minic_gerador
+	@$(call rodar_testes,$(TEST_GER),./minic_gerador,"Otimizações do Gerador",teste_0[6-9]_*.c)
 
 define rodar_testes
 	echo ""; \
@@ -126,31 +130,40 @@ define rodar_testes
 	echo "  Testes $(3)"; \
 	echo "══════════════════════════════════════════"; \
 	PASS=0; FAIL=0; \
-	for t in $(1)/*.c; do \
+	for t in $(1)/$(4); do \
 	    [ -f "$$t" ] || continue; \
 	    base=$$(basename $$t .c); \
 	    esperado=$(1)/$$base.esperado; \
+	    nao_esperado=$(1)/$$base.nao_esperado; \
 	    echo ""; \
 	    echo "  ── $$t"; \
+	    saida=$$($(2) $$t 2>&1); \
+	    status=$$?; \
 	    if [ -f "$$esperado" ]; then \
-	        saida=$$($(2) $$t 2>&1); \
 	        if echo "$$saida" | grep -qF "$$(cat $$esperado)"; then \
-	            echo "    PASSOU"; PASS=$$((PASS+1)); \
+	            if [ -f "$$nao_esperado" ] && echo "$$saida" | grep -qF "$$(cat $$nao_esperado)"; then \
+	                echo "    FALHOU"; \
+	                echo "    Não esperado: $$(cat $$nao_esperado)"; \
+	                echo "    Obtido       : $$(echo "$$saida" | head -10)"; \
+	                FAIL=$$((FAIL+1)); \
+	            else \
+	                echo "    PASSOU"; PASS=$$((PASS+1)); \
+	            fi; \
 	        else \
 	            echo "    FALHOU"; \
 	            echo "    Esperado: $$(cat $$esperado)"; \
-	            echo "    Obtido  : $$(echo "$$saida" | head -3)"; \
+	            echo "    Obtido  : $$(echo "$$saida" | head -10)"; \
 	            FAIL=$$((FAIL+1)); \
 	        fi; \
 	    else \
-	        $(2) $$t > /dev/null 2>&1; \
-	        if [ $$? -eq 0 ]; then echo "    PASSOU"; PASS=$$((PASS+1)); \
+	        if [ $$status -eq 0 ]; then echo "    PASSOU"; PASS=$$((PASS+1)); \
 	        else echo "    FALHOU"; FAIL=$$((FAIL+1)); fi; \
 	    fi; \
 	done; \
 	echo ""; \
 	echo "  Resultado: $$PASS passou(aram), $$FAIL falhou(aram)"; \
-	echo "══════════════════════════════════════════"
+	echo "══════════════════════════════════════════"; \
+	[ $$FAIL -eq 0 ]
 endef
 
 # ─────────────────────────────────────────────────────────────────────
@@ -161,4 +174,4 @@ clean:
 	rm -f $(SEM_DIR)/lex.yy.c  $(SEM_DIR)/parser.tab.c  $(SEM_DIR)/parser.tab.h
 	rm -f $(GER_DIR)/lex.yy.c  $(GER_DIR)/parser.tab.c  $(GER_DIR)/parser.tab.h
 
-.PHONY: all lexico sintatico semantico gerador test test-lex test-sint test-sem test-ger clean
+.PHONY: all lexico sintatico semantico gerador test test-lex test-sint test-sem test-ger test-ger clean

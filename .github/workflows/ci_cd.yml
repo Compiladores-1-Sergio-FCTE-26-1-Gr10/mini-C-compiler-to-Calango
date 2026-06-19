@@ -2,9 +2,7 @@ name: Build and Test Compiler
 
 on:
   push:
-    branches: [ main ]
   pull_request:
-    branches: [ main ]
 
 jobs:
   build-and-test:
@@ -20,7 +18,7 @@ jobs:
       - name: Build all
         run: make all
 
-      - name: Run lexical, syntactic, semantic and generator tests
+      - name: Run all tests
         run: make test
 
       - name: Archive tests
