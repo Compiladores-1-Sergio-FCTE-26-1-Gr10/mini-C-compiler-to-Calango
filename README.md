@@ -181,5 +181,5 @@ make test-lex
 make test-sint
 make test-sem
 make test-ger
-make test-ger
+make test-opt
 ```

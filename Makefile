@@ -13,7 +13,7 @@
 #   make test-sint  → testes do sintático
 #   make test-sem   → testes do semântico
 #   make test-ger   → testes básicos do gerador
-#   make test-ger   → testes das otimizações do gerador
+#   make test-opt   → testes das otimizações do gerador
 #   make clean      → remove arquivos gerados
 # ══════════════════════════════════════════════════════════════════════
 
@@ -107,7 +107,7 @@ $(GER_DIR)/lex.yy.c: $(GER_DIR)/lexer.l $(GER_DIR)/parser.tab.h
 # ─────────────────────────────────────────────────────────────────────
 # TESTES
 # ─────────────────────────────────────────────────────────────────────
-test: test-lex test-sint test-sem test-ger test-ger
+test: test-lex test-sint test-sem test-ger test-opt
 
 test-lex: minic_lexico
 	@$(call rodar_testes,$(TEST_LEX),./minic_lexico,"Léxico",*.c)
@@ -121,7 +121,7 @@ test-sem: minic_semantico
 test-ger: minic_gerador
 	@$(call rodar_testes,$(TEST_GER),./minic_gerador,"Gerador",teste_0[1-5]_*.c)
 
-test-ger: minic_gerador
+test-opt: minic_gerador
 	@$(call rodar_testes,$(TEST_GER),./minic_gerador,"Otimizações do Gerador",teste_0[6-9]_*.c)
 
 define rodar_testes
@@ -174,4 +174,4 @@ clean:
 	rm -f $(SEM_DIR)/lex.yy.c  $(SEM_DIR)/parser.tab.c  $(SEM_DIR)/parser.tab.h
 	rm -f $(GER_DIR)/lex.yy.c  $(GER_DIR)/parser.tab.c  $(GER_DIR)/parser.tab.h
 
-.PHONY: all lexico sintatico semantico gerador test test-lex test-sint test-sem test-ger test-ger clean
+.PHONY: all lexico sintatico semantico gerador test test-lex test-sint test-sem test-ger test-opt clean
