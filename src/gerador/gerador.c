@@ -2,7 +2,7 @@
  * Gerador de Código — Mini C → Calango
  * Disciplina: FGA0003 – Compiladores 1 (2026/1)
  *
- * Sintaxe 100% validada contra o repositório oficial do Calango:
+ * Mapeamento baseado no repositório oficial do Calango:
  *   https://github.com/lucasmoten/calango (CalangoTokenMaker.flex + IndentadorCalango.java)
  *
  * Mapeamento confirmado:
@@ -150,17 +150,44 @@ static void gen_printf(No *n, FILE *out, int nivel) {
 
     indent(out, nivel);
     if (!args) {
+        /* printf("texto\n") sem variáveis — emite string literal limpa */
         char buf[256];
         string_limpa(fmt->val.sval, buf, sizeof(buf));
         fprintf(out, "%s(\"%s\");\n", cmd, buf);
         return;
     }
-    fprintf(out, "%s(", cmd);
-    for (int i = 0; i < args->n_filhos; i++) {
-        if (i > 0) fprintf(out, ",");
-        gen_expr(args->filho[i], out);
+
+    /* printf("texto: %d\n", var) com variáveis:
+     * Preserva o texto fixo que precede o primeiro especificador de formato.
+     * Ex.: "soma: %d\n" → escreval("soma: ", soma)
+     */
+    {
+        char buf[256];
+        string_limpa(fmt->val.sval, buf, sizeof(buf));
+
+        /* Encontra o primeiro especificador %d/%f/%s/%c */
+        char *spec = strpbrk(buf, "%");
+        char prefixo[256] = "";
+        if (spec && spec > buf) {
+            size_t plen = (size_t)(spec - buf);
+            if (plen >= sizeof(prefixo)) plen = sizeof(prefixo) - 1;
+            strncpy(prefixo, buf, plen);
+            prefixo[plen] = '\0';
+        }
+
+        fprintf(out, "%s(", cmd);
+        int primeiro = 1;
+        if (prefixo[0] != '\0') {
+            fprintf(out, "\"%s\"", prefixo);
+            primeiro = 0;
+        }
+        for (int i = 0; i < args->n_filhos; i++) {
+            if (!primeiro) fprintf(out, ",");
+            gen_expr(args->filho[i], out);
+            primeiro = 0;
+        }
+        fprintf(out, ");\n");
     }
-    fprintf(out, ");\n");
 }
 
 /* ── Nó completo ──────────────────────────────────────────────────── */

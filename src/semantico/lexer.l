@@ -49,8 +49,8 @@ DIGITO      [0-9]
 LETRA       [a-zA-Z_]
 ALFANUM     [a-zA-Z0-9_]
 
-NUM_INT     [+-]?{DIGITO}+
-NUM_FLOAT   [+-]?{DIGITO}+\.{DIGITO}+
+NUM_INT     {DIGITO}+
+NUM_FLOAT   {DIGITO}+\.{DIGITO}+
 
 LIT_CHAR    '([^'\\]|\\.)'
 LIT_STRING  \"([^\"\\]|\\.)*\"
