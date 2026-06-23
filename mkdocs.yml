@@ -2,8 +2,7 @@ site_name: Mini C Compiler to Calango
 theme:
   name: material
   language: pt-BR
-  palette: 
-
+  palette:
     - scheme: default
       primary: indigo
       accent: indigo
@@ -17,26 +16,25 @@ theme:
         icon: material/brightness-4
         name: Mudar para modo claro
   features:
-    - search.suggest 
-    - content.code.copy 
+    - search.suggest
+    - content.code.copy
 
 markdown_extensions:
   - tables
   - attr_list
   - pymdownx.blocks.caption
   - md_in_html
-  - pymdownx.highlight: # Adicione isso para garantir o controle dos blocos
+  - pymdownx.highlight:
       anchor_linenums: true
       line_spans: __span
       pygments_lang_class: true
-  - pymdownx.superfences: # Melhora a renderização dos blocos de código
+  - pymdownx.superfences:
       custom_fences:
         - name: mermaid
           class: mermaid
           format: !!python/name:pymdownx.superfences.fence_code_format
   - pymdownx.arithmatex:
       generic: true
-
 
 extra_javascript:
   - javascripts/mathjax.js
@@ -46,8 +44,6 @@ extra_javascript:
 nav:
   - Home: index.md
   - Gerenciamento:
-    - Atas de Reunião:
-      - Ata 15/04/26: gerenciamento/atas-de-reuniao/ata-15-04.md
     - Abordagem de desenvolvimento: gerenciamento/abordagem-desenvolvimento.md
     - Planejamento de sprints: gerenciamento/planejamento-de-sprints.md
   - Escopo do Projeto: escopo.md
@@ -56,10 +52,12 @@ nav:
   - Analisador Léxico: analisador-lexico.md
   - Analisador Sintático: analisador-sintatico.md
   - Árvore Sintática Abstrata: arvore-sintatica-abstrata.md
+  - Analisador Semântico: analisador-semantico.md
   - Geração de Código: geracao-de-codigo.md
-  - Problemas e soluções encontrados: problemas-e-solucoes-encontrados.md
   - Otimizações do Compilador: otimizacoes.md
   - Suite de Testes: suite-de-testes.md
+  - Compilação e Execução: compilacao-execucao.md
+  - Problemas e soluções encontrados: problemas-e-solucoes-encontrados.md
 
 extra_css:
   - stylesheets/extra.css

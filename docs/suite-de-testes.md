@@ -2,84 +2,125 @@
 
 ## Visão Geral
 
-Para garantir a confiabilidade do **Mini C Compiler to Calango**, a equipe desenvolveu uma suíte abrangente de testes automatizados. A filosofia de testes adotada baseia-se no **particionamento de equivalência**, onde cada caso de teste representa uma categoria de comportamento distinto ou uma regra de negócio específica da linguagem.
+A suíte de testes valida o comportamento do compilador por fase. Em vez de testar apenas funções internas, os testes executam programas Mini C de entrada e conferem se cada etapa aceita casos válidos, rejeita casos inválidos ou gera o código Calango esperado.
 
-No total, o repositório conta com **17 casos de teste** rigorosos que validam desde a identificação de tokens (Análise Léxica) até a transcrição do código final (Gerador de Código). A validação dos resultados esperados nos testes finais é feita via verificação de *strings* garantidas na saída (usando `grep -qF` com arquivos `.esperado`).
-
----
-
-## Cobertura Geral do Pipeline
-
-A bateria de testes está dividida entre as quatro fases principais do pipeline do compilador, assegurando que o código rejeite construções inválidas (testes negativos) e processe adequadamente os códigos corretos (testes positivos). A Tabela 01 resume os testes executados.
-
-**Tabela 01:** Resumo de testes completos em todas as fases.
-
-| Fase | Total de Casos | Casos Positivos | Casos Negativos |
-|---|---|---|---|
-| **Léxico** | 2 | 1 (Todos os tokens válidos reconhecidos) | 1 (`++` e `+=` geram ERRO LÉXICO) |
-| **Sintático** | 2 | 1 (Estrutura sintática completa e válida) | 1 (Falta de `;` gera ERRO SINTÁTICO) |
-| **Semântico** | 8 | 4 (Programas totalmente válidos) | 3 (Erros: redeclaração, não declarada) + 1 (Aviso: sem init) |
-| **Gerador** | 5 | 5 (Verifica a integridade da sintaxe Calango na saída) | N/A (Gerador bloqueado se houver erros prévios) |
-
-**Autor(es):** [João Pedro](https://github.com/Jadequilin).
+A automação fica concentrada no `Makefile`, que permite executar a suíte completa ou apenas uma etapa específica.
 
 ---
 
-## Testes do Analisador Semântico
+## Organização dos Testes
 
-A fase semântica possui a maior carga de verificações de regras da linguagem. Foram construídos 8 casos de uso específicos para testar os alertas e interrupções gerados pela manipulação da Tabela de Símbolos. A Tabela 02 detalha esses arquivos.
+A estrutura esperada da pasta `testes` é:
 
-**Tabela 02:** Detalhamento dos testes da Análise Semântica.
+```text
+testes/
+├── lexico/
+├── sintatico/
+├── semantico/
+└── gerador/
+```
 
-| Arquivo | O que verifica |
+**Tabela 01:** Resumo dos grupos de teste.
+
+| Grupo | Comando | O que valida |
+|---|---|---|
+| Léxico | `make test-lex` | Reconhecimento de tokens e rejeição de símbolos fora do escopo. |
+| Sintático | `make test-sint` | Estruturas gramaticais válidas e erros de sintaxe. |
+| Semântico | `make test-sem` | Declaração, redeclaração, uso de variáveis e avisos semânticos. |
+| Gerador | `make test-ger` | Tradução básica de Mini C para Calango. |
+| Otimizações | `make test-opt` | Redução da AST antes da geração do código final. |
+
+---
+
+## Testes Léxicos
+
+Os testes léxicos verificam se o Flex reconhece corretamente palavras reservadas, identificadores, literais, operadores e delimitadores. Também cobrem símbolos fora do escopo do projeto, como incremento/decremento, atribuição composta e operadores bitwise.
+
+| Arquivo | Finalidade |
 |---|---|
-| `teste_01_valido.c` | Programa válido com os 4 tipos fundamentais, blocos `if/else`, e `printf`. (Zero erros esperados). |
-| `teste_02_while_for.c` | Loops `while` e `for`: valida o controle correto da variável de passo e validação da condição. |
-| `teste_03_dowhile.c` | Comando `do-while` aliado ao `scanf`: verifica se a variável é marcada com sucesso como "inicializada" logo após o `leia`. |
-| `teste_04_redeclaracao.c` | **ERRO SEMÂNTICO:** Tenta redeclarar propositalmente uma variável no mesmo escopo. |
-| `teste_05_nao_declarada.c` | **ERRO SEMÂNTICO:** Força o uso de uma variável fantasma/não declarada em uma expressão. |
-| `teste_06_sem_init.c` | **AVISO SEMÂNTICO:** Variável declarada e usada imediatamente antes de receber um primeiro valor. |
-| `teste_07_tipos.c` | Testa todos os 4 tipos primitivos e seus respectivos literais (`int`, `float`, `char`, `bool`). |
-| `teste_08_expr_logica.c` | Testa a avaliação de expressões compostas e aninhadas envolvendo `&&`, `||` e operadores relacionais. |
+| `teste_01_tokens.c` | Valida o reconhecimento dos principais tokens da linguagem. |
+| `teste_02_erro_operador.c` | Valida mensagens para operadores fora do escopo. |
 
-**Autor(es):** [João Pedro](https://github.com/Jadequilin).
+---
+
+## Testes Sintáticos
+
+Os testes sintáticos validam a gramática implementada em Bison.
+
+| Arquivo | Finalidade |
+|---|---|
+| `teste_01_valido.c` | Confirma aceitação de um programa Mini C válido. |
+| `teste_02_erro.c` | Confirma rejeição de estrutura sintaticamente inválida. |
+
+---
+
+## Testes Semânticos
+
+A fase semântica concentra validações sobre declaração e uso de variáveis.
+
+| Arquivo | Finalidade |
+|---|---|
+| `teste_01_valido.c` | Programa semanticamente válido. |
+| `teste_02_while_for.c` | Uso de variáveis em laços `while` e `for`. |
+| `teste_03_dowhile.c` | Uso de variáveis em `do-while`. |
+| `teste_04_redeclaracao.c` | Erro de redeclaração no mesmo escopo. |
+| `teste_05_nao_declarada.c` | Erro por uso de variável não declarada. |
+| `teste_06_sem_init.c` | Aviso por uso de variável antes da inicialização. |
+| `teste_07_tipos.c` | Cobertura de diferentes tipos primitivos aceitos pela linguagem. |
+| `teste_08_expr_logica.c` | Expressões relacionais e lógicas. |
 
 ---
 
 ## Testes do Gerador de Código
 
-Os testes do gerador não focam mais em erros no C, mas sim na precisão da tradução da AST para o pseudocódigo Calango válido. Arquivos anexos do tipo `.esperado` contêm a string de validação exigida. A Tabela 03 mapeia os 5 cenários testados.
+Os testes do gerador verificam se o programa Mini C é traduzido para uma saída Calango esperada. Arquivos `.esperado` são usados como referência para comparar trechos da saída.
 
-**Tabela 03:** Detalhamento dos testes de Geração de Código.
-
-| Arquivo | O que verifica (Saída Calango) |
+| Arquivo | O que verifica |
 |---|---|
-| `teste_01_basico.c` | Verifica a montagem da estrutura mínima obrigatória: `algoritmo MiniC;`, `principal` e `fimPrincipal`. |
-| `teste_02_if_else.c` | Geração correta e indentada do bloco de decisão `se(cond)entao ... senao ... fimSe`. |
-| `teste_03_while.c` | Geração precisa da repetição `enquanto(cond)faca ... fimEnquanto`. |
-| `teste_04_for.c` | Confirma a robustez da tradução do `for` em `enquanto` (inicialização *antes* do laço e passo no *interior* do bloco). |
-| `teste_05_scanf.c` | Mapeamento do `scanf` para o comando `leia(var)`, adequação dos tipos `logico` e palavras reservadas `verdadeiro`/`falso`, `e`/`ou`. |
-
-**Autor(es):** [João Pedro](https://github.com/Jadequilin).
+| `teste_01_basico.c` | Estrutura mínima `algoritmo MiniC`, `principal` e `fimPrincipal`. |
+| `teste_02_if_else.c` | Tradução de `if/else` para `se...senao...fimSe`. |
+| `teste_03_while.c` | Tradução de `while` para `enquanto...fimEnquanto`. |
+| `teste_04_for.c` | Conversão de `for` para inicialização + `enquanto` + passo no final do bloco. |
+| `teste_05_scanf.c` | Tradução de `scanf` para `leia` e conversão de tipos/literais básicos. |
 
 ---
 
-## Automação com Makefile
+## Testes de Otimização
 
-Para garantir produtividade e execução reprodutível em ambientes de integração contínua (CI) e máquinas locais, a execução da suíte foi unificada no comando de automação via `Makefile`.
+A PR de código final acrescenta testes específicos para a otimização aplicada à AST antes da emissão do código Calango.
 
-* **`make test`**: Executa ativamente **todos os 17 casos no total**, passando por todas as fases e validando cada arquivo contra a regra estabelecida.
+| Arquivo | O que verifica |
+|---|---|
+| `teste_06_otimizacao_constant_folding.c` | Redução de expressões constantes. |
+| `teste_07_otimizacao_simplificacao_algebrica.c` | Simplificação de operações redundantes. |
+| `teste_08_otimizacao_logica.c` | Simplificação de expressões booleanas. |
+| `teste_09_otimizacao_variavel_morta.c` | Remoção de declarações/atribuições sem uso posterior. |
 
-Também é possível isolar os testes na fase sob desenvolvimento ativo usando subcomandos:
-* **`make test-lex`**: Executa apenas as validações da fase léxica.
-* **`make test-sint`**: Executa apenas as validações da fase sintática.
-* **`make test-sem`**: Roda exclusivamente os 8 cenários do interpretador de regras semânticas.
-* **`make test-ger`**: Roda os testes de string sobre os arquivos gerados em Calango.
+---
+
+## Execução
+
+Para rodar todos os testes:
+
+```bash
+make test
+```
+
+Para rodar apenas uma etapa:
+
+```bash
+make test-lex
+make test-sint
+make test-sem
+make test-ger
+make test-opt
+```
 
 ---
 
 ## Histórico de Versões
 
 | Versão | Descrição | Data | Responsável |
-| ------ | --------- | ---- | ----------- |
-| `0.1` | Documentação inicial da suíte de testes (17 casos) e automação via Makefile. | 06/06/2026 | [Luiz Faria](https://github.com/luizfaria1989), [João Pedro](https://github.com/Jadequilin) |
+|---|---|---|---|
+| `0.1` | Documentação inicial da suíte de testes. | 06/06/2026 | [Luiz Faria](https://github.com/luizfaria1989), [João Pedro](https://github.com/Jadequilin) |
+| `0.2` | Inclusão dos testes do gerador e dos testes de otimização. | 19/06/2026 | [Pedro Silva](https://github.com/314dro), [João Pedro](https://github.com/Jadequilin) |

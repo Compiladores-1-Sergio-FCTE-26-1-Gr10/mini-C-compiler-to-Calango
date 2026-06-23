@@ -2,65 +2,55 @@
 
 ## Visão Geral
 
-> A análise semântica é a fase do compilador responsável por verificar o significado do programa, garantindo que as construções sintaticamente válidas também façam sentido dentro das regras da linguagem. (Aho et al., 2008, tradução da equipe).
+A análise semântica verifica se um programa sintaticamente válido também respeita as regras de significado da linguagem. No projeto Mini C Compiler to Calango, essa fase é integrada às ações do Bison e utiliza uma Tabela de Símbolos para registrar informações sobre variáveis.
 
-Enquanto o analisador sintático verifica se a *estrutura* do programa está correta, o analisador semântico verifica se o *significado* é válido. Por exemplo, um programa pode ser sintaticamente correto — as palavras estão no lugar certo — mas semanticamente errado, como quando uma variável é usada sem ter sido declarada.
+Na versão final do projeto, a análise semântica atua principalmente sobre declaração, uso, inicialização e disponibilidade dos identificadores. A etapa também constrói a AST, que será usada posteriormente pela otimização e pela geração de código.
 
-O analisador semântico do Mini C Compiler to Calango foi implementado diretamente no arquivo `parser_AS.y`, integrando as verificações semânticas às ações das regras gramaticais do Bison. Essa abordagem é chamada de **tradução dirigida pela sintaxe**: cada vez que o parser reduz uma regra gramatical, a ação semântica correspondente é executada.
+---
+
+## Integração com o Parser
+
+O analisador semântico é implementado junto ao arquivo `parser.y` da etapa semântica. A cada redução de regra gramatical, o Bison executa ações em C responsáveis por:
+
+- inserir variáveis declaradas na Tabela de Símbolos;
+- verificar redeclaração no escopo atual;
+- verificar uso de variável não declarada;
+- marcar variáveis como inicializadas;
+- emitir aviso quando uma variável é lida antes de receber valor;
+- construir nós da AST correspondentes às declarações, expressões e instruções.
+
+Essa abordagem é conhecida como tradução dirigida pela sintaxe, pois as ações semânticas são associadas diretamente às regras da gramática.
 
 ---
 
 ## Tabela de Símbolos
 
-O núcleo do analisador semântico é a **tabela de símbolos**, uma estrutura de dados que armazena informações sobre cada variável declarada no programa.
+A Tabela de Símbolos armazena os identificadores declarados no programa e seus metadados.
 
-### Estrutura
+**Tabela 01:** Campos principais da estrutura de símbolo.
 
-Cada entrada na tabela contém os seguintes campos:
+| Campo | Descrição |
+|---|---|
+| `nome` | Nome do identificador. |
+| `tipo` | Tipo declarado: `int`, `float`, `char` ou `bool`. |
+| `linhaDeclaracao` | Linha em que a variável foi declarada. |
+| `inicializado` | Indica se a variável já recebeu valor. |
+| `usado` | Indica se a variável foi referenciada em alguma expressão ou comando. |
+| `ordemDeclaracao` | Ordem de inserção na tabela. |
+| `escopo` | Identificador do escopo em que o símbolo foi inserido. |
+| `prox` | Ponteiro para o próximo símbolo da lista encadeada. |
 
-| Campo | Tipo | Descrição |
-|---|---|---|
-| `nome` | `char[64]` | Nome da variável (identificador) |
-| `tipo` | `TipoDado` | Tipo da variável (`int`, `float`, `char` ou `bool`) |
-| `inicializado` | `int` | Indica se a variável já recebeu um valor (`0` = não, `1` = sim) |
-| `linha_decl` | `int` | Linha do código-fonte onde a variável foi declarada |
+**Tabela 02:** Operações principais.
 
-O enumerador `TipoDado` representa os quatro tipos primitivos suportados pelo Mini C:
-
-```c
-typedef enum {
-    TIPO_INT,
-    TIPO_FLOAT,
-    TIPO_CHAR,
-    TIPO_BOOL,
-    TIPO_INVALIDO
-} TipoDado;
-```
-
-### Operações
-
-A tabela suporta três operações principais:
-
-**Inserção** (`tabela_insere`): chamada ao declarar uma variável. Verifica se o nome já existe na tabela antes de inserir — caso exista, emite erro de redeclaração.
-
-**Busca** (`tabela_busca`): chamada ao usar uma variável em atribuição, expressão ou entrada/saída. Retorna o ponteiro para o símbolo encontrado, ou `NULL` se não existir.
-
-**Impressão** (`tabela_imprime`): chamada ao final da análise, exibe a tabela formatada no terminal com todos os símbolos registrados.
-
-### Saída da tabela ao final da análise
-
-Ao concluir com sucesso, o compilador imprime a tabela de símbolos no terminal:
-
-```
-╔═════════════════════════════════════════════════╗
-║              TABELA DE SÍMBOLOS                 ║
-╠══════════════╦════════════╦═════════════╦═══════╣
-║ NOME         ║ TIPO       ║INICIALIZADO ║ LINHA ║
-╠══════════════╬════════════╬═════════════╬═══════╣
-║ x            ║ int        ║ sim         ║ 2     ║
-║ y            ║ int        ║ não         ║ 3     ║
-╚══════════════╩════════════╩═════════════╩═══════╝
-```
+| Operação | Responsabilidade |
+|---|---|
+| `inicializarTabela` | Prepara a tabela antes da análise. |
+| `inserirSimbolo` | Registra uma nova variável declarada. |
+| `buscarSimboloEscopoAtual` | Verifica se já existe variável com mesmo nome no escopo atual. |
+| `buscarSimbolo` | Procura uma variável declarada para uso em expressão, atribuição ou entrada/saída. |
+| `marcarInicializado` | Atualiza o estado de uma variável que recebeu valor. |
+| `marcarUsado` | Registra que uma variável foi utilizada. |
+| `imprimirTabela` | Exibe o conteúdo da tabela ao final da análise semântica. |
 
 ---
 
@@ -68,134 +58,70 @@ Ao concluir com sucesso, o compilador imprime a tabela de símbolos no terminal:
 
 ### Redeclaração de variável
 
-Ao declarar uma variável, o compilador verifica se ela já foi declarada anteriormente no mesmo escopo. Caso positivo, emite um erro semântico indicando a linha da declaração original.
-
-Dado o seguinte trecho de código Mini C:
+Ao declarar uma variável, o compilador verifica se já existe símbolo com o mesmo nome no escopo atual.
 
 ```c
 int main() {
     int x;
-    int x; 
+    int x;
 }
 ```
 
-A saída esperada é:
+Saída esperada:
 
-```
-ERRO SEMÂNTICO [linha 3]: variável 'x' já foi declarada na linha 2.
+```text
+ERRO SEMÂNTICO [linha 3]: variável 'x' já declarada neste escopo.
 ```
 
 ### Uso de variável não declarada
 
-Em atribuições, expressões, entradas (`scanf`) e na variável de passo do `for`, o compilador verifica se a variável referenciada foi previamente declarada. Caso não tenha sido, emite um erro semântico.
-
-Dado o seguinte trecho de código Mini C:
+O analisador verifica se o identificador existe antes de usá-lo em atribuições, expressões, `scanf` e passo de `for`.
 
 ```c
 int main() {
-    z = 10; 
+    z = 10;
 }
 ```
 
-A saída esperada é:
+Saída esperada:
 
-```
+```text
 ERRO SEMÂNTICO [linha 2]: variável 'z' não declarada.
 ```
 
-Essa verificação ocorre nos seguintes contextos:
+### Uso antes da inicialização
 
-| Contexto | Onde é verificado |
-|---|---|
-| Atribuição (`ID = expr`) | Regra `atribuicao` |
-| Uso em expressão (`ID`) | Regra `expressao` |
-| Leitura (`scanf(..., ID)`) | Regra `entrada` |
-| Passo do `for` (`ID = expr`) | Regra `atribuicao_for` |
-
-### Inferência de tipo nas expressões
-
-As expressões retornam o tipo inferido como valor semântico, utilizando o mecanismo `%type` do Bison. Isso permite que verificações futuras — como compatibilidade de tipos em atribuições — possam usar essa informação.
-
-A Tabela 01 resume as regras de inferência implementadas.
-
-**Tabela 01:** Regras de inferência de tipo nas expressões.
-
-| Expressão | Tipo retornado |
-|---|---|
-| `expr + expr`, `expr - expr`, `expr * expr`, `expr / expr` | `float` se algum operando for `float`; caso contrário, `int` |
-| `expr % expr` | `int` |
-| `expr == expr`, `expr != expr`, `expr < expr`, etc. | `bool` |
-| `expr && expr`, `expr \|\| expr` | `bool` |
-| `!expr` | `bool` |
-| `-expr` (unário) | mesmo tipo de `expr` |
-| `(expr)` | mesmo tipo de `expr` |
-| `ID` | tipo da variável conforme a tabela de símbolos |
-| `LIT_INT` | `int` |
-| `LIT_FLOAT` | `float` |
-| `LIT_CHAR` | `char` |
-| `LIT_STRING` | `string` |
-| `true`, `false` | `bool` |
-
-**Autor(es):** [Luiz Faria](https://github.com/luizfaria1989), [João Pedro](https://github.com/Jadequilin),  [Rivaldâvio](https://github.com/RivaFilho).
-
----
-
-## Tratamento de Erros
-
-Quando o analisador semântico detecta uma violação das regras de significado da linguagem, ele reporta o erro via `fprintf(stderr, ...)` com a posição exata no código-fonte. O formato adotado é:
-
-```
-ERRO SEMÂNTICO [linha N]: <descrição do erro>.
-```
-
-A análise **não é interrompida** ao encontrar um erro semântico — o compilador continua processando o restante do programa para reportar todos os erros de uma única vez.
-
----
-
-## Exemplo de Análise
-
-Dado o programa Mini C abaixo:
+Quando uma variável declarada é lida em uma expressão antes de receber valor, o analisador emite um aviso semântico.
 
 ```c
 int main() {
-    int x = 10;
+    int x;
     int y;
     y = x + 1;
-    printf("resultado: %d", y);
 }
 ```
 
-O analisador semântico executa as seguintes verificações:
+Saída esperada:
 
-1. Declaração de `x` → inserida na tabela com `inicializado = 1`, tipo `int`, linha 2.
-2. Declaração de `y` → inserida na tabela com `inicializado = 0`, tipo `int`, linha 3.
-3. Atribuição `y = x + 1` → `y` encontrado na tabela ✓; `x` encontrado na tabela ✓; tipo inferido da expressão: `int`. Marca `y` como `inicializado = 1`.
-4. `printf` com `y` → `y` encontrado na tabela ✓.
-
-A saída esperada ao final é:
-
+```text
+AVISO SEMÂNTICO [linha 4]: 'x' usada sem inicialização.
 ```
-Análise concluída: programa válido.
 
-╔═════════════════════════════════════════════════╗
-║              TABELA DE SÍMBOLOS                 ║
-╠══════════════╦════════════╦═════════════╦═══════╣
-║ NOME         ║ TIPO       ║INICIALIZADO ║ LINHA ║
-╠══════════════╬════════════╬═════════════╬═══════╣
-║ x            ║ int        ║ sim         ║ 2     ║
-║ y            ║ int        ║ sim         ║ 3     ║
-╚══════════════╩════════════╩═════════════╩═══════╝
-```
+### Marcação de variáveis utilizadas
+
+A fase semântica marca identificadores como usados ao encontrá-los em expressões, atribuições, comandos de entrada e comandos de saída. Essa informação também serve de apoio para a etapa de otimização da AST no gerador.
 
 ---
 
-## O que ainda não está implementado
+## Relação com a AST
 
-As verificações abaixo estão previstas para as próximas sprints:
+Além das verificações, o parser semântico constrói a AST. Cada declaração, atribuição, comando de controle, entrada/saída e expressão gera um nó ou subárvore. Ao final da análise, a AST pode ser impressa para depuração e reutilizada pelo fluxo de geração de código.
 
-- **Compatibilidade de tipos em atribuição:** verificar se o tipo da expressão é compatível com o tipo da variável (ex: atribuir `float`a um `int`).
-- **Uso de variável não inicializada:** avisar quando uma variável é lida antes de receber um valor.
-- **Verificação de tipo nas condições de laço:** garantir que a expressão de condição em `if`, `while` e `for` seja do tipo `bool`.
+---
+
+## Limitações da Verificação Semântica
+
+A Tabela de Símbolos registra o tipo declarado de cada variável e o código possui funções auxiliares para tratar compatibilidade de tipos. Porém, na implementação atual, as ações do parser concentram a validação efetiva em declaração, uso e inicialização. Por isso, a documentação não deve afirmar que todas as incompatibilidades de tipos são bloqueadas em tempo de compilação.
 
 ---
 
@@ -209,5 +135,6 @@ As verificações abaixo estão previstas para as próximas sprints:
 ## Histórico de Versões
 
 | Versão | Descrição | Data | Responsável |
-| ------ | --------- | ---- | ----------- |
+|---|---|---|---|
 | `0.1` | Criação da página e documentação inicial do analisador semântico. | 24/04/2026 | [João Pedro](https://github.com/Jadequilin) |
+| `0.2` | Atualização da documentação conforme a implementação final da Tabela de Símbolos, avisos de inicialização e AST. | 19/06/2026 | [João Pedro](https://github.com/Jadequilin), [Pedro Silva](https://github.com/314dro) |

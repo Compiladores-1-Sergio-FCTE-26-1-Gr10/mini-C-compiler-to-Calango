@@ -277,13 +277,13 @@ A linguagem possui quatro tipos primitivos:
 - `char`: caracteres;
 - `bool`: valores lógicos.
 
-Como a linguagem é estaticamente tipada, toda variável possui um tipo definido em tempo de compilação, e esse tipo deve ser respeitado nas atribuições e expressões.
+Como a linguagem é estaticamente tipada, toda variável possui um tipo declarado. A implementação final registra esses tipos na Tabela de Símbolos; a checagem efetiva do parser, porém, concentra-se em declaração, uso e inicialização dos identificadores.
 
 ---
 
 ### 3. Regras para atribuição
 
-Uma atribuição só é válida quando o tipo da expressão do lado direito é compatível com o tipo da variável do lado esquerdo.
+A política de tipos adotada pelo projeto considera válida uma atribuição quando o tipo da expressão do lado direito é compatível com o tipo da variável do lado esquerdo. Essa regra orienta a definição da linguagem, mesmo que a implementação final não bloqueie todos os casos de incompatibilidade nas ações semânticas.
 
 Exemplos válidos:
 

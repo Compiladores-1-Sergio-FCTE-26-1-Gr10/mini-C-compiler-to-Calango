@@ -2,68 +2,93 @@
 
 ## Visão Geral
 
-No desenvolvimento do Mini C Compiler to Calango, optou-se por não implementar uma fase de otimização explícita sobre código intermediário (como TAC — *Three-Address Code* ou SSA — *Static Single Assignment*). 
+No desenvolvimento do Mini C Compiler to Calango, o grupo optou por não implementar uma fase de otimização sobre código intermediário, como TAC (*Three-Address Code*) ou SSA (*Static Single Assignment*).
 
-Em vez disso, foram aplicadas otimizações estruturais de alto nível. Essas otimizações atuam diretamente sobre a estrutura do programa, no design das estruturas de dados internas (como a Tabela de Símbolos e a Árvore Sintática Abstrata) e nas decisões durante a emissão do código final, garantindo máxima eficiência dentro do escopo do projeto.
+A versão final do gerador, entretanto, inclui otimizações aplicadas diretamente sobre a **Árvore Sintática Abstrata (AST)** antes da emissão do código Calango. Essa decisão mantém o projeto dentro do escopo da disciplina, mas ainda permite reduzir expressões constantes, simplificar operações redundantes e remover declarações ou atribuições sem uso.
 
 ---
 
 ## Otimizações na Tabela de Símbolos
 
-A Tabela de Símbolos foi projetada para ter uma manutenção simplificada e desempenho adequado para o tamanho de escopo esperado no Mini C. A Tabela 01 apresenta as decisões de otimização adotadas.
+A Tabela de Símbolos foi projetada para manter uma estrutura simples e suficiente para o tamanho esperado dos programas Mini C.
 
-**Tabela 01:** Otimizações aplicadas na Tabela de Símbolos.
+**Tabela 01:** Decisões de otimização na Tabela de Símbolos.
 
 | Otimização | Impacto |
 |---|---|
-| **Busca com escopo progressivo (interno → externo)** | Implementa o mecanismo de *shadowing* (sombreamento de variáveis) corretamente sem adicionar custos computacionais extras de resolução de escopo. |
-| **Remoção imediata ao sair do escopo (`sairEscopo()`)** | Garante que o uso de memória seja mínimo em todos os momentos, limpando da tabela todas as variáveis assim que o bloco que as contém é encerrado. |
-| **Campo `usado` (variáveis mortas)** | Deixa a estrutura pronta para futuras etapas de eliminação de declarações desnecessárias (código morto) na geração do Calango. |
-| **Uso de `copiarStringSegura` (`strncpy` + null-term)** | Previne ativamente falhas de segurança e corrupção de memória (como *buffer overflow*) ao lidar com nomes de variáveis excessivamente longos. |
-| **Implementação via Lista Encadeada** | Considerando as restrições da linguagem Mini C, a complexidade O(n) com n pequeno é performática o suficiente. Mantém a base de código muito mais simples, limpa e rastreável do que se fosse implementada uma *Hash Table*. |
+| **Busca por escopo** | Permite consultar símbolos respeitando o escopo ativo e evita conflitos de nomes no mesmo bloco. |
+| **Remoção ao sair do escopo** | Libera símbolos associados ao escopo encerrado, reduzindo o uso de memória durante a compilação. |
+| **Campo `inicializado`** | Permite emitir aviso quando uma variável é usada antes de receber valor. |
+| **Campo `usado`** | Serve de apoio à identificação de variáveis que não influenciam o resultado final. |
+| **Cópia segura de strings** | Reduz risco de corrupção de memória ao registrar nomes de identificadores. |
+| **Lista encadeada** | Mantém a implementação simples e adequada ao volume de símbolos esperado. |
 
-**Autor(es):** [João Pedro](https://github.com/Jadequilin).
+**Autor(es):** [João Pedro](https://github.com/Jadequilin), [Pedro Silva](https://github.com/314dro).
 
 ---
 
-## Otimizações na AST (Árvore Sintática Abstrata)
+## Otimizações na AST
 
-O gerenciamento de memória e a travessia na AST formam o núcleo de performance do compilador durante as análises finais. A Tabela 02 resume as otimizações voltadas para a árvore.
+A AST representa a estrutura do programa depois da análise sintática. Como o gerador percorre essa árvore para produzir Calango, aplicar otimizações nessa estrutura permite limpar o programa antes da emissão final.
 
-**Tabela 02:** Otimizações aplicadas na estrutura da AST.
+**Tabela 02:** Otimizações aplicadas na AST.
 
-| Otimização | Impacto |
-|---|---|
-| **Lista encadeada direta via `->prox`** | A eliminação de nós intermediários "de lista" reduz a quantidade de alocações necessárias. Permite travessias mais rápidas e simplificadas através de loops comuns (`for(cur=n; cur; cur=cur->prox)`). |
-| **Array fixo `filho[4]` com alocação única** | A exigência de apenas uma alocação por nó melhora exponencialmente a localidade de cache. Os quatro filhos são inicializados nativamente como NULL. |
-| **Adoção restrita do `calloc` em vez do `malloc`** | Zera automaticamente os blocos de memória obtidos do sistema, eliminando uma grande classe de defeitos acidentais causados por contadores de filhos (`n_filhos`) não inicializados ou ponteiros com lixo de memória. |
-| **Desalocação via `ast_libera` recursiva** | Libera os nós filhos e os nós encadeados em `prox` em profundidade antes de acionar o `free` do nó pai, garantindo *zero vazamento de memória* (memory leak) independentemente da profundidade ou largura da árvore sintática gerada. |
+| Otimização | Exemplo | Resultado |
+|---|---|---|
+| **Constant folding** | `(2 + 3) * 4` | `20` |
+| **Simplificação algébrica** | `x + 0`, `x - 0`, `x * 1`, `x / 1` | `x` |
+| **Multiplicação por zero** | `x * 0` ou `0 * x` | `0` |
+| **Simplificação lógica** | `true && x` | `x` |
+| **Simplificação lógica** | `false || x` | `x` |
+| **Remoção de variáveis mortas** | declaração/atribuição sem uso posterior | nó removido da saída |
 
-**Autor(es):** [João Pedro](https://github.com/Jadequilin).
+Essas otimizações são aplicadas de forma recursiva por `otimizarAST`, antes da chamada final de geração de código.
+
+**Autor(es):** [João Pedro](https://github.com/Jadequilin), [Pedro Silva](https://github.com/314dro).
 
 ---
 
 ## Otimizações na Geração de Código
 
-O gerador recebe a AST completamente validada e a converte eficientemente. A Tabela 03 lista as otimizações implementadas para o empacotamento do código de saída.
+O gerador recebe a AST validada e otimizada, percorrendo seus nós para emitir código Calango.
 
-**Tabela 03:** Otimizações aplicadas no pipeline de geração Calango.
+**Tabela 03:** Decisões de geração com impacto na saída.
 
-| Otimização | Impacto |
+| Decisão | Impacto |
 |---|---|
-| **Parentesamento explícito em `gen_expr`** | Garante que toda a avaliação de precedência matemática capturada pela gramática LALR(1) seja preservada de forma imutável no Calango, prevenindo divergências de interpretação da linguagem alvo. |
-| **Escolha automática entre `escreva` vs `escreval`** | Ao analisar strings em tempo de compilação procurando quebras de linha explícitas, preserva a equivalência semântica de exibição sem a necessidade de comandos em múltiplas linhas. |
-| **Conversão universal `for` → `enquanto`** | Ao traduzir todos os laços de repetição do tipo `for` para uma estrutura genérica `enquanto`, garante-se o sucesso da execução para qualquer condição ou inicialização declarada, visto a restrição do laço `para` do interpretador alvo. |
-| **Bloqueio de pipeline (Fail-Fast)** | A inibição da geração de código para `erros_sem > 0` bloqueia desperdícios de processamento I/O e evita a geração de artefatos `.cal` incorretos a partir de lógicas furadas. |
-| **Separação estrutural de funções `gen_expr` e `gen_no`** | Expressões tornam-se completamente enxutas (inline) e desatreladas do controle de espaço em branco ou *newlines* (`\n`), prevenindo a quebra inadequada de linhas de instrução ao resolver sentenças complexas. |
-| **Indentação padronizada por nível** | O avanço em múltiplos de 3 espaços (`nivel * 3`) assegura a compatibilidade estrita do arquivo de saída com o `IndentadorCalango.java` nativo, promovendo legibilidade máxima do código compilado. |
+| **Geração a partir de AST otimizada** | Garante que reduções e remoções sejam aplicadas antes da emissão do código final. |
+| **Parentesamento explícito de expressões** | Preserva a precedência definida pela gramática e evita ambiguidades na linguagem alvo. |
+| **Conversão de `for` para `enquanto`** | Traduz o `for` do Mini C para uma forma compatível com o Calango. |
+| **Separação entre declaração e inicialização** | Converte `int x = 5;` para `inteiro x;` seguido de `x = 5;`, respeitando a sintaxe do Calango. |
+| **Escolha entre `escreva` e `escreval`** | Usa `escreval` quando o formato contém `
+` ao final; caso contrário, usa `escreva`. |
+| **Bloqueio em caso de erro semântico** | Evita gerar Calango quando a análise semântica já identificou erro. |
+| **Indentação padronizada** | Mantém a estrutura do código gerado legível e consistente. |
 
-**Autor(es):** [João Pedro](https://github.com/Jadequilin).
+---
+
+## Testes de Otimização
+
+A PR de código final acrescenta testes específicos para a etapa de otimização no diretório `testes/gerador`.
+
+| Teste | Finalidade |
+|---|---|
+| `teste_06_otimizacao_constant_folding.c` | Valida redução de expressões constantes. |
+| `teste_07_otimizacao_simplificacao_algebrica.c` | Valida remoção de operações aritméticas redundantes. |
+| `teste_08_otimizacao_logica.c` | Valida simplificação de expressões booleanas constantes. |
+| `teste_09_otimizacao_variavel_morta.c` | Valida remoção de variáveis declaradas ou atribuídas sem uso posterior. |
+
+Para executar apenas essa parte da suíte:
+
+```bash
+make test-opt
+```
 
 ---
 
 ## Histórico de Versões
 
 | Versão | Descrição | Data | Responsável |
-| ------ | --------- | ---- | ----------- |
+|---|---|---|---|
 | `0.1` | Criação da página para detalhamento das otimizações estruturais do compilador. | 06/06/2026 | [Luiz Faria](https://github.com/luizfaria1989), [João Pedro](https://github.com/Jadequilin) |
+| `0.2` | Inclusão das otimizações sobre a AST, dos testes de otimização e da integração com o fluxo do gerador. | 19/06/2026 | [Pedro Silva](https://github.com/314dro), [João Pedro](https://github.com/Jadequilin) |
