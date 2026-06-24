@@ -1,4 +1,4 @@
-/* TESTE SINTÁTICO 01 — estrutura válida */
+/* TESTE SINTÁTICO 01 — estrutura válida com if */
 int main() {
     int x;
     x = 5;

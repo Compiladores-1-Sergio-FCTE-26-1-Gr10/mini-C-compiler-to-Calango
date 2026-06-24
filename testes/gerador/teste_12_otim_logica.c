@@ -1,4 +1,4 @@
-/* TESTE GERADOR 08 — otimização: expressões lógicas constantes */
+/* TESTE GERADOR 12 — otimização: expressões lógicas constantes */
 int main() {
     bool ativo;
     ativo = true && (false || true);

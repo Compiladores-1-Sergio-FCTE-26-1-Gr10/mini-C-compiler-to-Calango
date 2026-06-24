@@ -1,4 +1,4 @@
-/* TESTE GERADOR 09 — otimização: remoção de variável morta */
+/* TESTE GERADOR 13 — otimização: remoção de variável morta */
 int main() {
     int usada;
     int morta;

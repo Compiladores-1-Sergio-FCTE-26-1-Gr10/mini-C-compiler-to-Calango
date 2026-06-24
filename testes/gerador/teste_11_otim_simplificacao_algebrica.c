@@ -1,4 +1,4 @@
-/* TESTE GERADOR 07 — otimização: simplificação algébrica */
+/* TESTE GERADOR 11 — otimização: simplificação algébrica (x+0)*1 → x */
 int main() {
     int x;
     int y;

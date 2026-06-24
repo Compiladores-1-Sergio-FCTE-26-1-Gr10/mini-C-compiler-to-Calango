@@ -1,4 +1,4 @@
-/* TESTE GERADOR 04 — for */
+/* TESTE GERADOR 04 — for traduzido para enquanto */
 int main() {
     int i;
     int soma;

@@ -1,10 +1,8 @@
-/* TESTE 03 — do-while e scanf */
+/* TESTE SEMÂNTICO 03 — do-while válido */
 int main() {
-    int n;
-    n = 0;
+    int i;
+    i = 5;
     do {
-        scanf("%d", n);
-        n = n + 1;
-    } while (n < 5);
-    printf("fim\n");
+        i = i - 1;
+    } while (i > 0);
 }

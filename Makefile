@@ -119,10 +119,10 @@ test-sem: minic_semantico
 	@$(call rodar_testes,$(TEST_SEM),./minic_semantico,"Semântico",*.c)
 
 test-ger: minic_gerador
-	@$(call rodar_testes,$(TEST_GER),./minic_gerador,"Gerador",teste_0[1-5]_*.c)
+	@$(call rodar_testes,$(TEST_GER),./minic_gerador,"Gerador",teste_0[0-9]_*.c)
 
 test-opt: minic_gerador
-	@$(call rodar_testes,$(TEST_GER),./minic_gerador,"Otimizações do Gerador",teste_0[6-9]_*.c)
+	@$(call rodar_testes,$(TEST_GER),./minic_gerador,"Otimizações do Gerador",teste_1[0-9]_*.c)
 
 define rodar_testes
 	echo ""; \

@@ -1,4 +1,4 @@
-/* TESTE GERADOR 05 — scanf e expressoes logicas */
+/* TESTE GERADOR 05 — scanf → leia e expressões lógicas */
 int main() {
     int n;
     bool ok;

@@ -1,4 +1,4 @@
-/* TESTE 04 — ERRO: redeclaração de variável */
+/* TESTE SEMÂNTICO 04 — ERRO: variável redeclarada no mesmo escopo */
 int main() {
     int x;
     int x;

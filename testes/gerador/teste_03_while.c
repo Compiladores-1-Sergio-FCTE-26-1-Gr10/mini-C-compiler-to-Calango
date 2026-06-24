@@ -1,4 +1,4 @@
-/* TESTE GERADOR 03 — while */
+/* TESTE GERADOR 03 — while → enquanto/faca/fimEnquanto */
 int main() {
     int i;
     i = 0;

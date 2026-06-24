@@ -1,4 +1,4 @@
-/* TESTE GERADOR 02 — if/else */
+/* TESTE GERADOR 02 — if/else → se/senao/fimSe */
 int main() {
     int x;
     x = 5;

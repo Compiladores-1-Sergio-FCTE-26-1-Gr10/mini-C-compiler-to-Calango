@@ -1,7 +1,3 @@
-/* TESTE GERADOR 01 — declarações e atribuições */
+/* TESTE GERADOR 01 — estrutura mínima */
 int main() {
-    int x;
-    float y;
-    x = 10;
-    y = 3.14;
 }
