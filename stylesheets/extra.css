@@ -1,0 +1,96 @@
+/* docs/stylesheets/extra.css */
+
+/* Estilo geral da tabela */
+.md-typeset table:not([class]) {
+    border-collapse: collapse;
+    border-radius: 8px;
+    overflow: hidden; /* Garante que as bordas fiquem arredondadas */
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    margin: 1.5em 0;
+    display: table; /* Garante que a sombra envolva a tabela toda */
+}
+
+/* Cabeçalho */
+.md-typeset table:not([class]) th {
+    background-color: #4051b5; /* Cor primária do Material */
+    color: white;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    padding: 12px 15px;
+}
+
+/* Linhas e Células */
+.md-typeset table:not([class]) td {
+    padding: 12px 15px;
+    border-bottom: 1px solid #eee;
+}
+
+/* Efeito Zebrado (Linhas alternadas) */
+.md-typeset table:not([class]) tr:nth-child(even) {
+    background-color: #f8f9fa;
+}
+
+/* Efeito de Hover (Destaque ao passar o mouse) */
+.md-typeset table:not([class]) tr:hover {
+    background-color: #f1f1f1;
+    transition: background-color 0.2s ease;
+}
+
+/* Forçando a barra do Mac nos blocos de código */
+.md-typeset .highlight:not(.arithmatex) {
+    position: relative;
+    padding-top: 38px !important; 
+    border-radius: 8px !important;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+    overflow: hidden;
+    margin: 1.5em 0;
+}
+
+/* 2. A barra superior */
+.md-typeset .highlight:not(.arithmatex)::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 38px;
+    background: #e0e0e0 !important;
+    z-index: 1;
+    border-bottom: 1px solid #d0d0d0;
+}
+
+/* 3. Os botões do Mac */
+.md-typeset .highlight:not(.arithmatex)::after {
+    content: "";
+    position: absolute;
+    top: 13px;
+    left: 15px;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: #ff5f56;
+    box-shadow: 22px 0 0 #ffbd2e, 44px 0 0 #27c93f;
+    z-index: 2;
+}
+
+/* 4. Garante que o código fique visível e não quebre o layout interno */
+.md-typeset .highlight:not(.arithmatex) pre {
+    margin: 0 !important;
+    padding: 15px !important;
+    background-color: transparent !important;
+}
+
+/* 5. PROTEÇÃO PARA O LATEX: 
+   Garante que o container do MathJax não herde o estilo de janela */
+.md-typeset .arithmatex, 
+.md-typeset .arithmatex * {
+    padding-top: 0 !important;
+    box-shadow: none !important;
+    background: none !important;
+}
+
+.md-typeset .arithmatex::before,
+.md-typeset .arithmatex::after {
+    display: none !important; /* Remove a barra de janela do LaTeX */
+}
