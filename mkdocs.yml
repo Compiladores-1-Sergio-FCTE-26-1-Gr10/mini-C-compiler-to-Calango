@@ -57,7 +57,7 @@ nav:
   - Otimizações do Compilador: otimizacoes.md
   - Suite de Testes: suite-de-testes.md
   - Compilação e Execução: compilacao-execucao.md
-  - Problemas e soluções encontrados: problemas-e-solucoes-encontrados.md
+  
 
 extra_css:
   - stylesheets/extra.css
