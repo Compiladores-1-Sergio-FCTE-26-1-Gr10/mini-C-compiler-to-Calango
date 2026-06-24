@@ -1,50 +1,41 @@
-# Compilação, Execução e Testes
+# Compilação, Execução Manual e Suíte de Testes
 
 ## Visão Geral
 
-Esta página reúne os comandos necessários para compilar, executar manualmente e testar o **Mini C Compiler to Calango**.
+Este documento apresenta os comandos necessários para compilar, executar manualmente e testar o Mini C Compiler to Calango.
 
-O projeto está organizado por fase do compilador. A execução completa passa por análise léxica, análise sintática, análise semântica, construção/otimização da AST e geração de código Calango.
+O compilador traduz um subconjunto da linguagem Mini C para código equivalente em Calango, passando pelas etapas de análise léxica, análise sintática, análise semântica e geração de código.
 
 ---
 
 ## Requisitos
 
-Antes de compilar o projeto em um ambiente Linux ou WSL/Ubuntu, instale as dependências:
+Antes de compilar o projeto, instale as dependências:
 
 ```bash
 sudo apt-get update
 sudo apt-get install -y build-essential flex bison libfl-dev
 ```
 
-| Dependência | Finalidade |
-|---|---|
-| `gcc` | Compilar os arquivos C do projeto. |
-| `make` | Automatizar a compilação e a execução dos testes. |
-| `flex` | Gerar os analisadores léxicos a partir dos arquivos `.l`. |
-| `bison` | Gerar os analisadores sintáticos a partir dos arquivos `.y`. |
-| `libfl-dev` | Disponibilizar a biblioteca `libfl`, usada na linkagem do analisador léxico. |
+| Dependência | Finalidade                                                         |
+| ----------- | ------------------------------------------------------------------ |
+| `gcc`       | Compilar os arquivos C do projeto.                                 |
+| `make`      | Automatizar a compilação e execução dos testes.                    |
+| `flex`      | Gerar o analisador léxico.                                         |
+| `bison`     | Gerar o analisador sintático.                                      |
+| `libfl-dev` | Disponibilizar a biblioteca `libfl`, usada na linkagem com `-lfl`. |
 
 ---
 
-## Compilação
+## Compilação do Compilador
 
-Para compilar todas as fases:
+Compilar todas as etapas:
 
 ```bash
 make all
 ```
 
-Também é possível compilar cada fase separadamente:
-
-```bash
-make lexico
-make sintatico
-make semantico
-make gerador
-```
-
-Os executáveis esperados são:
+Executáveis gerados:
 
 ```text
 ./minic_lexico
@@ -53,7 +44,18 @@ Os executáveis esperados são:
 ./minic_gerador
 ```
 
-Para limpar executáveis e arquivos intermediários gerados pelo Flex/Bison:
+Compilar cada etapa separadamente:
+
+```bash
+make lexico
+make sintatico
+make semantico
+make gerador
+```
+
+---
+
+## Limpeza dos Arquivos Gerados
 
 ```bash
 make clean
@@ -68,18 +70,25 @@ make all
 
 ---
 
-## Execução Manual
+## Execução Manual do Compilador
 
-Para gerar código Calango a partir de um arquivo Mini C:
+Compilar o gerador:
 
 ```bash
 make gerador
+```
+
+Executar o compilador com um arquivo Mini C:
+
+```bash
 ./minic_gerador caminho/do/arquivo.c
 ```
 
-A saída é impressa no terminal em formato Calango.
+A saída será exibida diretamente no terminal em formato Calango.
 
-### Exemplo
+---
+
+## Exemplo de Execução Manual
 
 Arquivo `manual_otimizacao.c`:
 
@@ -91,8 +100,7 @@ int main() {
     resultado = (2 + 3) * 4;
     morta = 99;
 
-    printf("%d
-", resultado);
+    printf("%d\n", resultado);
 }
 ```
 
@@ -113,38 +121,81 @@ principal
 fimPrincipal
 ```
 
-Esse exemplo cobre duas etapas do pipeline final: a expressão constante `(2 + 3) * 4` é reduzida para `20`, e a variável `morta` é removida por não influenciar a saída do programa.
+Esse exemplo valida:
+
+| Comportamento                     | Resultado esperado                             |
+| --------------------------------- | ---------------------------------------------- |
+| Otimização de expressão constante | `(2 + 3) * 4` é reduzido para `20`.            |
+| Remoção de variável morta         | A variável `morta` não aparece na saída final. |
 
 ---
 
-## Suíte de Testes
+## Suíte de Testes Automatizados
 
-Para executar toda a suíte:
+A suíte de testes fica organizada na pasta:
+
+```text
+testes/
+```
+
+Estrutura esperada:
+
+```text
+testes/
+├── lexico/
+├── sintatico/
+├── semantico/
+└── gerador/
+```
+
+---
+
+## Executar Todos os Testes
 
 ```bash
 make test
 ```
 
-O comando principal chama os testes por etapa:
+Esse comando executa:
 
-| Comando | Etapa testada |
-|---|---|
-| `make test-lex` | Analisador léxico. |
-| `make test-sint` | Analisador sintático. |
-| `make test-sem` | Analisador semântico. |
-| `make test-ger` | Geração básica de código Calango. |
-| `make test-opt` | Otimizações aplicadas antes da geração final. |
+| Etapa       | Descrição                                                      |
+| ----------- | -------------------------------------------------------------- |
+| Léxico      | Valida reconhecimento de tokens e erros léxicos.               |
+| Sintático   | Valida estruturas gramaticais válidas e inválidas.             |
+| Semântico   | Valida escopo, tipos, inicialização e uso de variáveis.        |
+| Gerador     | Valida a geração de código Calango.                            |
+| Otimizações | Valida otimizações aplicadas antes da emissão do código final. |
 
-Para validar somente as otimizações do gerador:
+---
+
+## Executar Testes por Etapa
 
 ```bash
+make test-lex
+make test-sint
+make test-sem
+make test-ger
 make test-opt
+```
+
+| Comando          | O que executa                        |
+| ---------------- | ------------------------------------ |
+| `make test-lex`  | Testes do analisador léxico.         |
+| `make test-sint` | Testes do analisador sintático.      |
+| `make test-sem`  | Testes do analisador semântico.      |
+| `make test-ger`  | Testes básicos do gerador de código. |
+| `make test-opt`  | Testes de otimização do gerador.     |
+
+O alvo `make test-opt` existe para facilitar a validação isolada das otimizações, mas esses testes também são executados pelo comando principal:
+
+```bash
+make test
 ```
 
 ---
 
 ## Histórico de Versões
 
-| Versão | Descrição | Data | Responsável |
-|---|---|---|---|
-| `0.1` | Criação da página de compilação, execução manual e testes. | 19/06/2026 | [Pedro Silva](https://github.com/314dro), [João Pedro](https://github.com/Jadequilin) |
+| Versão | Descrição                                                                                             | Data       | Responsável                              |
+| ------ | ----------------------------------------------------------------------------------------------------- | ---------- | ---------------------------------------- |
+| `0.1`  | Criação da documentação de compilação, execução manual e suíte de testes para publicação no GitPages. | 19/06/2026 | [Pedro Silva](https://github.com/314dro) |

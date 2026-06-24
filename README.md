@@ -57,3 +57,129 @@ Acesse a documentação completa do projeto [aqui](https://compiladores-1-sergio
 | Versão       | Descrição | Data                                           | Autor                                       |
 | --------- | ----- | --------------------------------------------------- | -------------------------------------------- |
 | 1.0 |  Criação do readme inicial.   |  12/04/2026 | [@Luiz](https://github.com/luizfaria1989) |
+| 1.1 |  Adição de guia do compilador.   |  19/06/2026 | [@Pedro](https://github.com/314dro) |
+
+
+# Guia Mini C Compiler to Calango
+
+Guia rápido para compilar, executar e testar o compilador Mini C para Calango.
+
+## Requisitos
+
+Instale as dependências necessárias:
+
+```bash
+sudo apt-get update
+sudo apt-get install -y build-essential flex bison
+```
+
+## Compilação
+
+Para compilar todas as etapas do compilador:
+
+```bash
+make all
+```
+
+Também é possível compilar cada etapa separadamente:
+
+```bash
+make lexico
+make sintatico
+make semantico
+make gerador
+```
+
+Executáveis gerados:
+
+```text
+./minic_lexico
+./minic_sintatico
+./minic_semantico
+./minic_gerador
+```
+
+## Limpeza
+
+Para remover executáveis e arquivos intermediários gerados pelo `flex` e pelo `bison`:
+
+```bash
+make clean
+```
+
+## Execução manual
+
+Para gerar código Calango a partir de um arquivo Mini C:
+
+```bash
+make gerador
+./minic_gerador caminho/do/arquivo.c
+```
+
+A saída será impressa no terminal em formato Calango.
+
+## Exemplo de testes manual
+
+### Exemplo 1 — constant folding e variável morta
+
+Arquivo `manual_otimizacao.c`:
+
+```c
+int main() {
+    int resultado;
+    int morta;
+
+    resultado = (2 + 3) * 4;
+    morta = 99;
+
+    printf("%d\n", resultado);
+}
+```
+
+Execução:
+
+```bash
+./minic_gerador manual_otimizacao.c
+```
+
+Saída esperada:
+
+```text
+algoritmo MiniC;
+principal
+   inteiro resultado;
+   resultado = 20;
+   escreval(resultado);
+fimPrincipal
+```
+
+O teste valida que `(2 + 3) * 4` foi reduzido para `20` e que a variável `morta` foi removida da saída.
+
+
+## Testes automatizados
+
+Para rodar toda a suíte de testes:
+
+```bash
+make test
+```
+
+Esse comando executa os testes:
+
+```text
+léxicos
+sintáticos
+semânticos
+gerador
+otimizações do gerador
+```
+
+Para rodar uma etapa específica:
+
+```bash
+make test-lex
+make test-sint
+make test-sem
+make test-ger
+make test-opt
+```
